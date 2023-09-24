@@ -16,16 +16,11 @@ class CustomAppbar extends StatelessWidget {
       titleTextStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontSize: 18,
           fontWeight: FontWeight.w300,
-          fontFamily: 'roboto',
+          fontFamily: 'calibri',
           color: Colors.white),
       title: title,
       centerTitle: true,
-      backgroundColor: secondary,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          color: tertiary,
-        ),
-      ),
+      backgroundColor: primary,
     );
   }
 }

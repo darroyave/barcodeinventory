@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
-
 class EntradaInventarioPage extends StatefulWidget {
   const EntradaInventarioPage({super.key});
 
@@ -27,11 +26,7 @@ class _EntradaInventarioPageState extends State<EntradaInventarioPage> {
   int? _productId;
 
   final List<String> _conceptOptions = [
-    'Purchase',
-    'Customer returns',
-    'In-house production',
-    'Donations and gifts',
-    'Transfers',
+    'Receive',
   ];
 
   Future<void> _submitEntry() async {

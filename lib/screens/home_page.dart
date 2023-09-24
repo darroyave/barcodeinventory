@@ -1,4 +1,3 @@
-
 import 'package:dailystopstock/screens/category_list_page.dart';
 import 'package:dailystopstock/screens/codebar_gen.dart';
 import 'package:dailystopstock/screens/entry_inventary.dart';
@@ -22,7 +21,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: neutral,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: tertiary,
+        backgroundColor: primary,
         title: Text(
           'DAILYSTOP INVENTARY',
           style: Theme.of(context)
@@ -109,32 +108,12 @@ class _HomePageState extends State<HomePage> {
             ),
             NeuButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const CodeBarGen(),
-                //   ),
-                // );
-              },
-              child: Text(
-                'ITEMS COUNT',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Colors.white),
-              ),
-            ),
-            NeuButton(
-              onPressed: () {
-
-         Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const CodeBarGen(),
                   ),
                 );
-
-
               },
               child: Text(
                 'BARCODE GEN',
@@ -151,8 +130,8 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(20.0),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            foregroundColor: tertiary,
-            backgroundColor: tertiary,
+            foregroundColor: primary,
+            backgroundColor: primary,
             padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

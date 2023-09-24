@@ -16,12 +16,12 @@ class _NeuButtonState extends State<NeuButton> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.4,
-      height: 100,
+      height: 50,
       child: NeumorphicButton(
         onPressed: widget.onPressed,
         duration: const Duration(milliseconds: 300),
         style: NeumorphicStyle(
-          color: secondary,
+          color: primary,
           shape: NeumorphicShape.flat,
           intensity: isPressed ? 0.7 : 0.9,
           boxShape: NeumorphicBoxShape.roundRect(
