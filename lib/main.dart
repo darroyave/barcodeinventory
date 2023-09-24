@@ -6,9 +6,6 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
-
-
-
 }
 
 class MyApp extends StatelessWidget {
@@ -37,11 +34,11 @@ class MyApp extends StatelessWidget {
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: lightScheme,
-            extensions: [lightCustomColors],
-          ),
+          // theme: ThemeData(
+          //   useMaterial3: true,
+          //   colorScheme: lightScheme,
+          //   extensions: [lightCustomColors],
+          // ),
           darkTheme: ThemeData(
             useMaterial3: true,
             colorScheme: darkScheme,
