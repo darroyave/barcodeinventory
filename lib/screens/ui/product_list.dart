@@ -39,6 +39,7 @@ class _ProductListPageState extends State<ProductListPage> {
       ProductData productData = ProductData.fromJson(data);
       setState(() {
         _productData = productData;
+        print(data);
       });
     }
   }
@@ -46,7 +47,6 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(70),
         child: CustomAppbar(
@@ -56,15 +56,18 @@ class _ProductListPageState extends State<ProductListPage> {
       body: ListView.builder(
         itemCount: _productData.results.length,
         itemBuilder: (BuildContext context, int index) {
+        final  product = _productData.results[index];
           return Card(
             color: Colors.white,
             margin: const EdgeInsets.all(5),
             elevation: 1,
             child: ListTile(
-              trailing: const CircleAvatar(
-                child: Text('27'),
+              trailing: Chip(
+                backgroundColor: Colors.greenAccent,
+                label: Text(_productData.results[index].stock.toString()),
               ),
-              title: Text(_productData.results[index].name),
+              title:  Text(product.name),
+              subtitle: Text(product.price.toString()),
             ),
           );
         },
