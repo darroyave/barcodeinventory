@@ -1,5 +1,11 @@
+import 'package:flutter/material.dart';
+
 class AppConstants {
   static const String appName = 'DailyStop Stock';
+
+  static Color kPrimaryColor = const Color(0xFF6F35A5);
+  static Color kPrimaryLightColor = const Color(0xFFF1E6FF);
+  static double defaultPadding = 16.0;
 
   static const int customerId = 54; // Walking	Customer
 

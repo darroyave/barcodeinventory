@@ -1,9 +1,8 @@
-
-import 'package:dailystopstock/screens/category_list_page.dart';
-import 'package:dailystopstock/screens/count_inventary.dart';
-import 'package:dailystopstock/screens/entry_inventary.dart';
-import 'package:dailystopstock/screens/move_inventory.dart';
-import 'package:dailystopstock/screens/out_inventory.dart';
+import 'package:dailystopstock/screens/ui/category_list_page.dart';
+import 'package:dailystopstock/screens/ui/count_inventary.dart';
+import 'package:dailystopstock/screens/ui/entry_inventary.dart';
+import 'package:dailystopstock/screens/ui/move_inventory.dart';
+import 'package:dailystopstock/screens/ui/out_inventory.dart';
 import 'package:dailystopstock/utils/custom_color.g.dart';
 import 'package:flutter/material.dart';
 

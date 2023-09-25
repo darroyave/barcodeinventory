@@ -1,4 +1,3 @@
-import 'package:dailystopstock/utils/custom_color.g.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppbar extends StatelessWidget {
@@ -12,7 +11,7 @@ class CustomAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      iconTheme: const IconThemeData(color: Colors.white, size: 30),
+      iconTheme: const IconThemeData(color: Colors.green, size: 30),
       titleTextStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontSize: 18,
           fontWeight: FontWeight.w300,
@@ -20,7 +19,6 @@ class CustomAppbar extends StatelessWidget {
           color: Colors.white),
       title: title,
       centerTitle: true,
-      backgroundColor: primary,
     );
   }
 }
