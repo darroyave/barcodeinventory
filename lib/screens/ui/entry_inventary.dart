@@ -123,7 +123,7 @@ class _EntradaInventarioPageState extends State<EntradaInventarioPage> {
 
   _searchProduct(String barCode) async {
     final response = await http.get(
-      Uri.parse("${AppConstants.urlBase}/api/product/upc/$barCode"),
+      Uri.parse("${AppConstants.urlBase}/api/product/upc/31/$barCode"),
       headers: <String, String>{
         'Authorization': 'Bearer ${AppConstants.tokenDemo}',
       },
@@ -137,7 +137,7 @@ class _EntradaInventarioPageState extends State<EntradaInventarioPage> {
         _productName = product.name;
       });
     } else {
-      throw Exception('Failed to load categories');
+      throw Exception('Failed to load products');
     }
   }
 
