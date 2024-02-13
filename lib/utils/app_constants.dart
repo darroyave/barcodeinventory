@@ -53,5 +53,5 @@ class AppConstants {
   static const int branchIdDemo = 31;
 
   static const String tokenDemo =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjMiLCJuYmYiOjE3MDc3OTAzNTUsImV4cCI6MTcwODM5NTE1NSwiaWF0IjoxNzA3NzkwMzU1fQ.BaPM43hZFWNKSK3by2Yjb9Ky0F_eGZ2z-MrscE8G50o";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjMiLCJuYmYiOjE3MDc4NDc0OTYsImV4cCI6MTcwODQ1MjI5NiwiaWF0IjoxNzA3ODQ3NDk2fQ.BeNwkeZbTwgueI34wrrEpPOECJkCIievCNY7CljqxeY";
 }
