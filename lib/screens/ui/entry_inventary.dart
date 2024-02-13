@@ -137,7 +137,10 @@ class _EntradaInventarioPageState extends State<EntradaInventarioPage> {
         _productName = product.name;
       });
     } else {
-      throw Exception('Failed to load products');
+      setState(() {
+        _productId = 0;
+        _productName = "Producto no existe";
+      });
     }
   }
 
