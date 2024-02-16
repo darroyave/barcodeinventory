@@ -1,5 +1,6 @@
 import 'package:barcodeinventory/screens/add_product_screen.dart';
 import 'package:barcodeinventory/screens/inventory_entry_screen.dart';
+import 'package:barcodeinventory/screens/show_inventory_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,6 +52,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 24,
                 ),
               ),
+            ),
+            ListTile(
+              title: const Text('Show Inventory'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ShowInventoryScreen()),
+                );
+              },
             ),
             ListTile(
               title: const Text('Add Product'),
