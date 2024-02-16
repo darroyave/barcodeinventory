@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
+import '../service/inventory_service.dart';
 import '../utils/app_constants.dart';
 
 class ShowInventoryScreen extends StatefulWidget {
@@ -18,6 +18,8 @@ class ShowInventoryScreen extends StatefulWidget {
 
 class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
   final TextEditingController _productController = TextEditingController();
+
+  final InventoryService _inventoryService = InventoryService();
 
   String? _productName;
   int? _stock = 0;
@@ -45,15 +47,10 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
   }
 
   _searchProduct(String barCode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('token');
-
-    final response = await http.get(
-      Uri.parse("${AppConstants.urlBase}/api/product/upc/31/$barCode"),
-      headers: <String, String>{
-        'Authorization': 'Bearer $accessToken',
-      },
+    http.Response response = await _inventoryService.authorizedGet(
+      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchId}/$barCode",
     );
+
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
       Product? product = Product.fromJson(data);
@@ -64,7 +61,7 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
       });
     } else {
       setState(() {
-        _productName = "Producto no existe";
+        _productName = "Product does not exist";
         _stock = 0;
       });
     }

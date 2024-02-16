@@ -17,6 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final AuthService _authService = AuthService();
 
+  final _formKey = GlobalKey<FormState>();
+
   Future<void> _login() async {
     String userName = _userNameController.text;
     String password = _passwordController.text;
@@ -52,29 +54,130 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('DailyStop'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _userNameController,
-              decoration: const InputDecoration(labelText: 'UserName'),
-            ),
-            const SizedBox(height: 20.0),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: _login,
-              child: const Text('Login'),
-            ),
-          ],
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(
+                height: 200,
+              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      onChanged: (value) {},
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter Username";
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.text,
+                      controller: _userNameController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter UserName',
+                        suffixIcon: Icon(
+                          Icons.people_outlined,
+                          color: Colors.deepPurple,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.deepPurple,
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.deepPurple, width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.deepPurple, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      onChanged: (value) {},
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter Password";
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your password',
+                        suffixIcon: Icon(
+                          Icons.remove_red_eye_sharp,
+                          color: Colors.deepPurple,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.lock_open_outlined,
+                          color: Colors.deepPurple,
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.deepPurple, width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.deepPurple, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: _login,
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Sign In",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

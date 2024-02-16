@@ -49,21 +49,21 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Show Inventory'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/showinventory');
+                Navigator.pushNamed(context, '/showinventory');
               },
             ),
             ListTile(
               title: const Text('Add Product'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/addproduct');
+                Navigator.pushNamed(context, '/addproduct');
               },
             ),
             ListTile(
               title: const Text('Inventory Entry'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/entryinventory');
+                Navigator.pushNamed(context, '/entryinventory');
               },
             ),
           ],

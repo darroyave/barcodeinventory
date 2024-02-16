@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/product.dart';
+import '../service/inventory_service.dart';
 
 class InventoryEntryScreen extends StatefulWidget {
   const InventoryEntryScreen({super.key});
@@ -21,6 +21,8 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
   final TextEditingController _productController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
 
+  final InventoryService _inventoryService = InventoryService();
+
   String? _selectedConcept;
   String? _productName;
   int? _productId;
@@ -29,26 +31,27 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
     'Receive',
   ];
 
+  void _clearFields() {
+    _productController.clear();
+    _quantityController.clear();
+    _selectedConcept = null;
+    _productName = null;
+    _productId = 0;
+  }
+
   Future<void> _submitEntry() async {
-    int quantity = int.parse(_quantityController.text);
+    int quantity = int.tryParse(_quantityController.text) ?? 0;
+
     String concept = _selectedConcept!;
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('token');
-
-    // Enviar la entrada de inventario al backend
-    final response = await http.post(
-      Uri.parse('${AppConstants.urlBase}/api/inventory/entry'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      },
-      body: jsonEncode(<String, dynamic>{
+    http.Response response = await _inventoryService.authorizedPost(
+      '${AppConstants.urlBase}/api/inventory/entry',
+      <String, dynamic>{
         'product': _productId ?? 0,
         'quantity': quantity,
         'concept': concept,
         'store': AppConstants.branchIdDemo
-      }),
+      },
     );
 
     if (response.statusCode == 200) {
@@ -65,10 +68,7 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
                 child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  _productController.clear();
-                  _quantityController.clear();
-                  _productId = null;
-                  _productName = "";
+                  _clearFields();
                 },
               ),
             ],
@@ -121,14 +121,8 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
   }
 
   _searchProduct(String barCode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('token');
-
-    final response = await http.get(
-      Uri.parse("${AppConstants.urlBase}/api/product/upc/31/$barCode"),
-      headers: <String, String>{
-        'Authorization': 'Bearer $accessToken',
-      },
+    http.Response response = await _inventoryService.authorizedGet(
+      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchId}/$barCode",
     );
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
