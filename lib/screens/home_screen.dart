@@ -1,10 +1,5 @@
-import 'package:barcodeinventory/screens/add_product_screen.dart';
-import 'package:barcodeinventory/screens/inventory_entry_screen.dart';
-import 'package:barcodeinventory/screens/show_inventory_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,11 +13,8 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
 
-    Navigator.pushReplacement(
-      // ignore: use_build_context_synchronously
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
+    // ignore: use_build_context_synchronously
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
@@ -57,33 +49,21 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Show Inventory'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ShowInventoryScreen()),
-                );
+                Navigator.pushReplacementNamed(context, '/showinventory');
               },
             ),
             ListTile(
               title: const Text('Add Product'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AddProductScreen()),
-                );
+                Navigator.pushReplacementNamed(context, '/addproduct');
               },
             ),
             ListTile(
               title: const Text('Inventory Entry'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InventoryEntryScreen()),
-                );
+                Navigator.pushReplacementNamed(context, '/entryinventory');
               },
             ),
           ],

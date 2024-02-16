@@ -1,11 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils/app_constants.dart';
-import 'home_screen.dart';
+import '../service/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,29 +15,37 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController =
       TextEditingController(text: "12345678");
 
+  final AuthService _authService = AuthService();
+
   Future<void> _login() async {
     String userName = _userNameController.text;
     String password = _passwordController.text;
 
-    final response = await http.post(
-      Uri.parse('${AppConstants.urlBase}${AppConstants.login}'),
-      body: json.encode({'email': userName, 'password': password}),
-      headers: {'Content-Type': 'application/json'},
-    );
+    try {
+      await _authService.login(userName, password);
 
-    if (response.statusCode == 200) {
-      var responseData = json.decode(response.body);
-      String accessToken = responseData['token'];
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', accessToken);
-
-      Navigator.pushReplacement(
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (error) {
+      showDialog(
         // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Alert'),
+            content: const Text('UserName or Password error!!.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
       );
-    } else {}
+    }
   }
 
   @override
