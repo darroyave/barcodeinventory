@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:barcodeinventory/models/login_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,8 +15,11 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      var responseData = json.decode(response.body);
-      String accessToken = responseData['token'];
+      dynamic data = json.decode(response.body);
+
+      LoginResponse? loginResponse = LoginResponse.fromJson(data);
+
+      String accessToken = loginResponse.token;
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', accessToken);
