@@ -1,4 +1,4 @@
-# dailystopstock
+# barcodeinventory
 
 A new Flutter project.
 
