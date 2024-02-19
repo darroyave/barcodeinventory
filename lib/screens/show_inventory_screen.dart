@@ -48,7 +48,7 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
 
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
-      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchId}/$barCode",
+      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
     );
 
     if (response.statusCode == 200) {

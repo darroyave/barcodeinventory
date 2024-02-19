@@ -50,5 +50,5 @@ class AppConstants {
   static const String tokenPaymentCloud2 = "41af75d8638d4b4498dc4e8c56e089db";
   static const String serialDevice = "2290004840";
 
-  static const int branchIdDemo = 31;
+  static const int branchIdDailyStop = 31;
 }

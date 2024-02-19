@@ -50,7 +50,7 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
         'product': _productId ?? 0,
         'quantity': quantity,
         'concept': concept,
-        'store': AppConstants.branchIdDemo
+        'store': AppConstants.branchIdDailyStop
       },
     );
 
@@ -122,7 +122,7 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
 
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
-      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchId}/$barCode",
+      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
     );
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
