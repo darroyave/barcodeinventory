@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/product_response.dart';
+import '../service/inventory_service.dart';
+
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
 
@@ -18,6 +21,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _costController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+
+  final InventoryService _inventoryService = InventoryService();
 
   bool isEBTChecked = false;
   bool isTaxChecked = false;
@@ -48,22 +53,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
     String barcodeResult = _productController.text;
 
     if (barcodeResult.isNotEmpty && price > 0) {
-      final response = await http.post(
-        Uri.parse('${AppConstants.urlBase}/api/temp/update'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'name': name,
-          'price': price,
-          'upc': barcodeResult,
-          'tax': isTaxChecked ? 7.0 : 0.0,
-          'ebt': isEBTChecked,
-          'cost': cost,
-        }),
-      );
+      http.Response response = await _inventoryService.authorizedPost(
+          '${AppConstants.urlBase}/api/product/update', <String, dynamic>{
+        'name': name,
+        'price': price,
+        'upc': barcodeResult,
+        'tax': isTaxChecked ? 7.0 : 0.0,
+        'ebt': isEBTChecked,
+        'cost': cost,
+      });
 
       if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+        ProductResponse? productResponse = ProductResponse.fromJson(data);
+
         setState(() {
           isTaxChecked = false;
           isEBTChecked = false;
@@ -81,7 +84,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Alert'),
+              title: Text(productResponse.message),
               content: Text(price),
               actions: <Widget>[
                 TextButton(
@@ -95,6 +98,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
           },
         );
       }
+    } else {
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Alert'),
+            content: const Text("Please enter data"),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
