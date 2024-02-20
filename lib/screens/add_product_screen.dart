@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:barcodeinventory/utils/app_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/product_response.dart';
@@ -26,25 +24,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   bool isEBTChecked = false;
   bool isTaxChecked = false;
-
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      debugPrint(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      if (barcodeScanRes != '-1') {
-        _productController.text = barcodeScanRes;
-      }
-    });
-  }
 
   Future<void> _submitEntry() async {
     double price = double.parse("0${_priceController.text}");
@@ -142,13 +121,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 labelText: 'Scan Product',
                 suffixIcon: IconButton(
                   color: Colors.teal,
-                  onPressed: () async {
-                    await scanBarcodeNormal();
-                  },
-                  icon: const Icon(Icons.barcode_reader),
+                  onPressed: () async {},
+                  icon: const Icon(Icons.search),
                 ),
               ),
-              onFieldSubmitted: (_) async {},
+              onFieldSubmitted: (_) async {
+                // Keypress
+              },
             ),
             const SizedBox(height: 12.0),
             TextFormField(

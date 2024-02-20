@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:barcodeinventory/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
@@ -98,27 +96,6 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
     }
   }
 
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      if (barcodeScanRes != '-1') {
-        _productController.text = barcodeScanRes;
-
-        // Buscar el producto
-        _searchProduct(barcodeScanRes);
-      }
-    });
-  }
-
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
       "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
@@ -159,12 +136,20 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
                 hintText: "Now Press Image and scan Product",
                 hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
                 labelText: 'Scan Product',
+                prefixIcon: IconButton(
+                  color: Colors.teal,
+                  onPressed: () async {
+                    _productController.text = "";
+                    _productName = "";
+                  },
+                  icon: const Icon(Icons.clear),
+                ),
                 suffixIcon: IconButton(
                   color: Colors.teal,
                   onPressed: () async {
-                    await scanBarcodeNormal();
+                    _searchProduct(_productController.text);
                   },
-                  icon: const Icon(Icons.barcode_reader),
+                  icon: const Icon(Icons.search),
                 ),
               ),
               onFieldSubmitted: (_) async {

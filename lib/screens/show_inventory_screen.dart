@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
@@ -23,28 +21,6 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
 
   String? _productName;
   int? _stock = 0;
-
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      debugPrint(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      if (barcodeScanRes != '-1') {
-        _productController.text = barcodeScanRes;
-
-        // Buscar el producto
-        _searchProduct(barcodeScanRes);
-      }
-    });
-  }
 
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
@@ -79,6 +55,7 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
           children: [
             TextFormField(
               controller: _productController,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -87,12 +64,18 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
                 hintText: "Now Press Image and scan Product",
                 hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
                 labelText: 'Scan Product',
-                suffixIcon: IconButton(
+                prefixIcon: IconButton(
                   color: Colors.teal,
                   onPressed: () async {
-                    await scanBarcodeNormal();
+                    _productController.text = "";
+                    _productName = "";
                   },
-                  icon: const Icon(Icons.barcode_reader),
+                  icon: const Icon(Icons.clear),
+                ),
+                suffixIcon: IconButton(
+                  color: Colors.teal,
+                  onPressed: () async {},
+                  icon: const Icon(Icons.search),
                 ),
               ),
               onFieldSubmitted: (_) async {
@@ -104,9 +87,10 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
               child: Text(
                 _productName ?? "",
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
               ),
             ),
             const SizedBox(height: 12.0),
