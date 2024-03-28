@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../components/drawer_widget.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -29,46 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'DailyStop',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              title: const Text('Show Inventory'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/showinventory');
-              },
-            ),
-            ListTile(
-              title: const Text('Add Product'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/addproduct');
-              },
-            ),
-            ListTile(
-              title: const Text('Inventory Entry'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/entryinventory');
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: const DrawerWidget(),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

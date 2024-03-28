@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:barcodeinventory/utils/app_constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -53,46 +52,9 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
     );
 
     if (response.statusCode == 200) {
-      showDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            insetAnimationDuration: const Duration(milliseconds: 100),
-            title: const Text('Inventory entry'),
-            content: const Text('The entry was successfully registered.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _clearFields();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      _showErrorDialog('The entry was successfully registered.');
     } else {
-      // ignore: use_build_context_synchronously
-      showDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error when registering the inventory entry.'),
-            content: const Text('The inventory entry could not be recorded.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      _showErrorDialog('The inventory entry could not be recorded.');
     }
   }
 
@@ -222,6 +184,26 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showErrorDialog(String message) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Inventory Transfer'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
