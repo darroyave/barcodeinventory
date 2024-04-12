@@ -31,6 +31,13 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
+            title: const Text('Show Price'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/checkprice');
+            },
+          ),
+          ListTile(
             title: const Text('Add Product'),
             onTap: () {
               Navigator.pop(context);
