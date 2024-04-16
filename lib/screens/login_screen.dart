@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../service/auth_service.dart';
+import '../utils/dimensions.dart';
+import '../utils/gradient_color_helper.dart';
+import '../utils/styles.dart';
+import '../widgets/custom_button_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -51,132 +55,137 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void dispose() {
+    _userNameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('DailyStop'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 200,
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Enter Username";
-                        } else {
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.text,
-                      controller: _userNameController,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter UserName',
-                        suffixIcon: Icon(
-                          Icons.people_outlined,
-                          color: Colors.deepPurple,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: Colors.deepPurple,
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurple, width: 1),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurple, width: 2),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                      ),
+      body: Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+        decoration: BoxDecoration(
+          gradient: GradientColorHelper.gradientColor(),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "DailyStop",
+                    style: fontSizeBlack.copyWith(
+                      fontSize: Dimensions.fontSizeOverOverLarge,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Enter Password";
-                        } else {
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.text,
-                      obscureText: true,
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your password',
-                        suffixIcon: Icon(
-                          Icons.remove_red_eye_sharp,
-                          color: Colors.deepPurple,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock_open_outlined,
-                          color: Colors.deepPurple,
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurple, width: 1),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurple, width: 2),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      onTap: _login,
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Sign In",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
+                  ),
+                  const SizedBox(height: 50),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          onChanged: (value) {},
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Enter Username";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.text,
+                          controller: _userNameController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter UserName',
+                            suffixIcon: Icon(
+                              Icons.people_outlined,
+                              color: Colors.deepPurple,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.deepPurple,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 20),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.deepPurple, width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.deepPurple, width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
                             ),
                           ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          onChanged: (value) {},
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Enter Password";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.text,
+                          obscureText: true,
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter your password',
+                            suffixIcon: Icon(
+                              Icons.remove_red_eye_sharp,
+                              color: Colors.deepPurple,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock_open_outlined,
+                              color: Colors.deepPurple,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 20),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.deepPurple, width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.deepPurple, width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        CustomButtonWidget(
+                          isLoading: false,
+                          buttonText: "Sign In",
+                          onPressed: () => _login(),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
