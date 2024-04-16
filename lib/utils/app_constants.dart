@@ -51,4 +51,7 @@ class AppConstants {
   static const String serialDevice = "2290004840";
 
   static const int branchIdDailyStop = 31;
+
+  // Shared Key
+  static const String theme = 'theme';
 }

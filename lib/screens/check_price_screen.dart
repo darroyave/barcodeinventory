@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
-import '../models/product_data.dart';
 import '../service/inventory_service.dart';
 import '../utils/app_constants.dart';
 
@@ -29,7 +28,7 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
       Product? product = Product.fromJson(data);
-      print(product.price);
+      debugPrint(product.price.toString());
 
       setState(() {
         _productId = product.id;
