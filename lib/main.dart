@@ -1,3 +1,4 @@
+import 'package:barcodeinventory/screens/barcode_generate_screen.dart';
 import 'package:barcodeinventory/screens/check_price_screen.dart';
 import 'package:barcodeinventory/screens/count_inventory_screen.dart';
 import 'package:barcodeinventory/screens/inventory_entry_screen.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
             '/outinventory': (context) => const OutStockScreen(),
             '/countinventory': (context) => const CountInventoryScreen(),
             '/checkprice': (context) => const CheckPriceScreen(),
+            '/barcodegenerator': (context) => const BarCodeGenerateScreen(),
           },
         );
       },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../components/drawer_widget.dart';
+import '../widgets/drawer_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Theme.of(context).primaryColor.withOpacity(.03),
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Barcode Inventory'),
         actions: <Widget>[
