@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 
-import '../models/product.dart';
 import '../service/inventory_service.dart';
 import '../utils/app_constants.dart';
 import '../utils/color_resources.dart';
@@ -20,27 +21,40 @@ class UploadImageScreen extends StatefulWidget {
 
 class _UploadImageScreenState extends State<UploadImageScreen> {
   final TextEditingController _productController = TextEditingController();
-
   final InventoryService _inventoryService = InventoryService();
 
   String? _productName;
-
   Uint8List? imageBytes;
   final ImagePicker _picker = ImagePicker();
+  bool isLoading = false; // Nuevo estado para controlar la carga
 
   Future<void> pickImageFromGallery() async {
+    setState(() {
+      isLoading = true; // Activar indicador de carga al seleccionar imagen
+    });
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       final bytes = await image.readAsBytes();
       removeBackgroundFromBytes(bytes);
+    } else {
+      setState(() {
+        isLoading = false; // Desactivar indicador si no se selecciona imagen
+      });
     }
   }
 
   Future<void> pickImageFromCamera() async {
+    setState(() {
+      isLoading = true; // Activar indicador de carga al tomar foto
+    });
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       final bytes = await image.readAsBytes();
       removeBackgroundFromBytes(bytes);
+    } else {
+      setState(() {
+        isLoading = false; // Desactivar indicador si no se toma foto
+      });
     }
   }
 
@@ -56,34 +70,10 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
           .encode({'image_file_b64': base64Encode(imageBytes), 'size': 'auto'}),
     );
 
-    if (response.statusCode == 200) {
-      setState(() {
-        this.imageBytes = response.bodyBytes;
-      });
-    } else {
-      if (kDebugMode) {
-        print('Error al eliminar el fondo: ${response.body}');
-      }
-    }
-  }
-
-  _searchProduct(String barCode) async {
-    http.Response response = await _inventoryService.authorizedGet(
-      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
-    );
-
-    if (response.statusCode == 200) {
-      dynamic data = jsonDecode(response.body);
-      Product? product = Product.fromJson(data);
-
-      setState(() {
-        _productName = product.name;
-      });
-    } else {
-      setState(() {
-        _productName = "Product does not exist";
-      });
-    }
+    setState(() {
+      this.imageBytes = response.statusCode == 200 ? response.bodyBytes : null;
+      isLoading = false; // Desactivar indicador de carga después de procesar
+    });
   }
 
   @override
@@ -97,38 +87,37 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
         children: [
           TextFormField(
             controller: _productController,
-            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.teal),
               ),
               hintText: "Now Press Image and scan Product",
-              hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
               labelText: 'Scan Product',
               prefixIcon: IconButton(
-                color: Colors.teal,
-                onPressed: () async {
-                  _productController.text = "";
-                  _productName = "";
+                onPressed: () {
+                  _productController.clear();
+                  setState(() {
+                    _productName = null;
+                  });
                 },
                 icon: const Icon(Icons.clear),
               ),
               suffixIcon: IconButton(
-                color: Colors.teal,
-                onPressed: () async {},
+                onPressed: () async {
+                  //    _searchProduct(_productController.text);
+                },
                 icon: const Icon(Icons.search),
               ),
             ),
-            onFieldSubmitted: (_) async {
-              _searchProduct(_productController.text);
+            onFieldSubmitted: (_) {
+              // _searchProduct(_productController.text);
             },
           ),
           const SizedBox(height: 12.0),
           CustomButtonWidget(
             isLoading: false,
             buttonText: "Select image from gallery",
-            onPressed: pickImageFromCamera,
+            onPressed: pickImageFromGallery,
           ),
           const SizedBox(height: 10),
           CustomButtonWidget(
@@ -137,12 +126,12 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
             onPressed: pickImageFromCamera,
             buttonColor: ColorResources.colorPrint,
           ),
-          imageBytes != null
-              ? Image.memory(
-                  imageBytes!,
-                  height: 200,
-                )
-              : const Text('Select an image'),
+          isLoading
+              ? Center(
+                  child: Lottie.asset('assets/lottie/ai_loading.json'))
+              : imageBytes != null
+                  ? Image.memory(imageBytes!, height: 200)
+                  : const Text('Select an image'),
         ],
       ),
     );
