@@ -54,4 +54,8 @@ class AppConstants {
 
   // Shared Key
   static const String theme = 'theme';
+
+  static const String urlRemoveBg = "https://api.remove.bg/v1.0/removebg";
+
+  static const String tokenRemoveBg = "RcavZs7cJy8NndySSwkQErWK";
 }

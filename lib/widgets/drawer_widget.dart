@@ -83,10 +83,10 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('AddItem'),
+            title: const Text('Upload Image Product'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/additem');
+              Navigator.pushNamed(context, '/uploadImage');
             },
           ),
           CustomCategoryButtonWidget(
