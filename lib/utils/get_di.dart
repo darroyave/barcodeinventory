@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../controllers/product_controller.dart';
+import '../controllers/barcode_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/upload_controller.dart';
 
@@ -15,7 +15,7 @@ Future<void> init() async {
   // Controller
   Get.lazyPut(() => ThemeController(sharedPreferences: Get.find()));
 
-  Get.lazyPut(() => ProductController());
-
   Get.lazyPut(() => UploadController());
+
+  Get.lazyPut(() => BarcodeController());
 }
