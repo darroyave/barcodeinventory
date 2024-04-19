@@ -23,10 +23,32 @@ class BarCodeGenerateScreen extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
-                  controller: controller.upcController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'UPC'),
+                  controller: controller.productController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Colors.teal),
+                    ),
+                    hintText: "Now Press Image and scan Product",
+                    hintStyle:
+                        const TextStyle(fontSize: 16, color: Colors.grey),
+                    labelText: 'Scan Product',
+                    prefixIcon: IconButton(
+                      color: Colors.teal,
+                      onPressed: controller.clearData,
+                      icon: const Icon(Icons.clear),
+                    ),
+                    suffixIcon: IconButton(
+                      color: Colors.teal,
+                      onPressed: () => controller
+                          .searchProduct(controller.productController.text),
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
+                  onFieldSubmitted: controller.searchProduct,
                 ),
+                const SizedBox(height: 20),
+                Text("Product: ${controller.productName}"),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: controller.quantityController,
@@ -44,7 +66,7 @@ class BarCodeGenerateScreen extends StatelessWidget {
                           onPressed: () {
                             int quantity = int.parse(
                                 "0${controller.quantityController.text}");
-                            String upc = controller.upcController.text;
+                            String upc = controller.productController.text;
                             if (quantity > 0 && upc.isNotEmpty) {
                               controller.generatePDF(quantity, upc);
                             }
