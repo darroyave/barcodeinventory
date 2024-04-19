@@ -76,7 +76,7 @@ class BarCodeGenerateScreen extends StatelessWidget {
                     Expanded(
                       child: CustomButtonWidget(
                         buttonText: 'Print',
-                        onPressed: () {},
+                        onPressed: controller.printPDF,
                         buttonColor: ColorResources.colorPrint,
                       ),
                     ),

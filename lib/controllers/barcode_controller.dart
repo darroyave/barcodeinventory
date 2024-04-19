@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:http/http.dart' as http;
+import 'package:printing/printing.dart';
 
 import '../models/product.dart';
 import '../service/inventory_service.dart';
@@ -91,5 +92,11 @@ class BarcodeController extends GetxController implements GetxService {
 
     _generatedPDFBytes = await pdf.save();
     update();
+  }
+
+  Future<void> printPDF() async {
+    if (_generatedPDFBytes != null) {
+      await Printing.layoutPdf(onLayout: (format) async => _generatedPDFBytes!);
+    }
   }
 }
