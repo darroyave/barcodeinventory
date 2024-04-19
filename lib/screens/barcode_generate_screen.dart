@@ -5,13 +5,7 @@ import 'package:get/get.dart';
 import '../controllers/barcode_controller.dart';
 import '../utils/color_resources.dart';
 import '../utils/dimensions.dart';
-import '../utils/styles.dart';
-import '../widgets/custom_app_bar_widget.dart';
 import '../widgets/custom_button_widget.dart';
-import '../widgets/custom_field_with_title_widget.dart';
-import '../widgets/custom_header_widget.dart';
-import '../widgets/custom_text_field_widget.dart';
-import '../widgets/images.dart';
 
 class BarCodeGenerateScreen extends StatelessWidget {
   const BarCodeGenerateScreen({super.key});
@@ -28,62 +22,38 @@ class BarCodeGenerateScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.paddingSizeDefault,
-                      vertical: Dimensions.paddingSizeDefault),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Text('code: '),
-                          Text(
-                            'productCode',
-                            style: fontSizeRegular.copyWith(
-                                color: Theme.of(context).hintColor),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Text('product_name: '),
-                          Expanded(
-                            child: Text(
-                              'title',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: fontSizeRegular.copyWith(
-                                  color: Theme.of(context).hintColor),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                TextFormField(
+                  controller: controller.upcController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'UPC'),
                 ),
-                CustomFieldWithTitleWidget(
-                  limitSet: true,
-                  setLimitTitle: 'maximum_quantity_270',
-                  customTextField: CustomTextFieldWidget(
-                      hintText: 'sku_hint',
-                      controller: controller.quantityController),
-                  title: 'qty',
-                  requiredField: true,
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: controller.quantityController,
+                  decoration: const InputDecoration(labelText: 'Quantity'),
+                  keyboardType: TextInputType.number,
                 ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(width: Dimensions.fontSizeSmall),
                     Expanded(
                       child: CustomButtonWidget(
-                        buttonText: 'generate',
-                        onPressed: controller.generatePDF,
-                      ),
+                          buttonText: 'Generate',
+                          onPressed: () {
+                            int quantity = int.parse(
+                                "0${controller.quantityController.text}");
+                            String upc = controller.upcController.text;
+                            if (quantity > 0 && upc.isNotEmpty) {
+                              controller.generatePDF(quantity, upc);
+                            }
+                          }),
                     ),
                     const SizedBox(width: Dimensions.fontSizeSmall),
                     Expanded(
                       child: CustomButtonWidget(
-                        buttonText: 'download',
+                        buttonText: 'Print',
                         onPressed: () {},
                         buttonColor: ColorResources.colorPrint,
                       ),
@@ -91,7 +61,7 @@ class BarCodeGenerateScreen extends StatelessWidget {
                     const SizedBox(width: Dimensions.fontSizeSmall),
                     Expanded(
                       child: CustomButtonWidget(
-                        buttonText: 'reset',
+                        buttonText: 'Reset',
                         onPressed: () {},
                         buttonColor: ColorResources.getResetColor(),
                         textColor: ColorResources.getTextColor(),
@@ -107,6 +77,10 @@ class BarCodeGenerateScreen extends StatelessWidget {
                     child: PDFView(
                       filePath: null,
                       pdfData: controller.generatedPDFBytes,
+                      enableSwipe: true,
+                      swipeHorizontal: true,
+                      autoSpacing: false,
+                      pageFling: false,
                     ),
                   ),
               ],
