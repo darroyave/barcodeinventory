@@ -8,8 +8,7 @@ class CustomHeaderWidget extends StatelessWidget {
   final String headerImage;
   final String title;
   const CustomHeaderWidget(
-      {Key? key, required this.title, required this.headerImage})
-      : super(key: key);
+      {super.key, required this.title, required this.headerImage});
 
   @override
   Widget build(BuildContext context) {

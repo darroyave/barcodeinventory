@@ -14,7 +14,7 @@ class CustomCategoryButtonWidget extends StatelessWidget {
   final Function? onTap;
   final bool? showDivider;
   const CustomCategoryButtonWidget({
-    Key? key,
+    super.key,
     required this.icon,
     required this.buttonText,
     this.isSelected = false,
@@ -22,7 +22,7 @@ class CustomCategoryButtonWidget extends StatelessWidget {
     this.isDrawer = true,
     this.onTap,
     this.showDivider = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

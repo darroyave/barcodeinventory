@@ -6,12 +6,11 @@ class CustomOnTapWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? highlightColor;
   const CustomOnTapWidget(
-      {Key? key,
+      {super.key,
       this.radius,
       required this.child,
       this.onTap,
-      this.highlightColor})
-      : super(key: key);
+      this.highlightColor});
 
   @override
   Widget build(BuildContext context) {

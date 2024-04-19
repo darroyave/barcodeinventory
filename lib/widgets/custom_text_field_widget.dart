@@ -24,7 +24,7 @@ class CustomTextFieldWidget extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextFieldWidget({
-    Key? key,
+    super.key,
     this.hintText = 'Write something...',
     this.controller,
     this.focusNode,
@@ -42,7 +42,7 @@ class CustomTextFieldWidget extends StatefulWidget {
     this.isPassword = false,
     this.fillColor,
     this.inputFormatters,
-  }) : super(key: key);
+  });
 
   @override
   CustomTextFieldWidgetState createState() => CustomTextFieldWidgetState();

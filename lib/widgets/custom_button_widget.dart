@@ -18,7 +18,7 @@ class CustomButtonWidget extends StatelessWidget {
   final bool isClear;
   final bool isLoading;
   const CustomButtonWidget({
-    Key? key,
+    super.key,
     this.onPressed,
     required this.buttonText,
     this.buttonColor,
@@ -31,7 +31,7 @@ class CustomButtonWidget extends StatelessWidget {
     this.icon,
     this.isClear = false,
     this.isLoading = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

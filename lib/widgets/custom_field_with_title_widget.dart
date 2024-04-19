@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import '../utils/dimensions.dart';
 import '../utils/styles.dart';
 
@@ -14,7 +12,7 @@ class CustomFieldWithTitleWidget extends StatelessWidget {
   final Function? onTap;
   final String? toolTipsMessage;
   const CustomFieldWithTitleWidget({
-    Key? key,
+    super.key,
     required this.customTextField,
     this.title,
     this.setLimitTitle,
@@ -23,7 +21,7 @@ class CustomFieldWithTitleWidget extends StatelessWidget {
     this.limitSet = false,
     this.onTap,
     this.toolTipsMessage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

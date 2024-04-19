@@ -8,8 +8,7 @@ import 'custom_on_tap_widget.dart';
 class CustomAppBarWidget extends StatelessWidget
     implements PreferredSizeWidget {
   final bool isBackButtonExist;
-  const CustomAppBarWidget({Key? key, this.isBackButtonExist = true})
-      : super(key: key);
+  const CustomAppBarWidget({super.key, this.isBackButtonExist = true});
 
   @override
   Widget build(BuildContext context) {
