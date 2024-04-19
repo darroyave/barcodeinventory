@@ -82,6 +82,13 @@ class DrawerWidget extends StatelessWidget {
               Navigator.pushNamed(context, '/barcodegenerator');
             },
           ),
+          ListTile(
+            title: const Text('AddItem'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/additem');
+            },
+          ),
           CustomCategoryButtonWidget(
             icon: Images.logout,
             buttonText: "Log Out",

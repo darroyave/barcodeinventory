@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'controllers/theme_controller.dart';
+import 'screens/add_item.dart';
 import 'screens/add_product_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
             '/countinventory': (context) => const CountInventoryScreen(),
             '/checkprice': (context) => const CheckPriceScreen(),
             '/barcodegenerator': (context) => const BarCodeGenerateScreen(),
+            '/additem': (context) => const AddItem(),
           },
         );
       },
