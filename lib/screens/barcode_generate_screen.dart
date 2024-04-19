@@ -14,7 +14,7 @@ class BarCodeGenerateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("bar_code_generator"),
+        title: const Text("Bar code generator"),
       ),
       body: GetBuilder<BarcodeController>(
         builder: (controller) {
