@@ -5,8 +5,11 @@ import 'package:barcodeinventory/screens/count_inventory_screen.dart';
 import 'package:barcodeinventory/screens/show_inventory_screen.dart';
 import 'package:barcodeinventory/screens/transfer_stock_screen.dart';
 import 'package:barcodeinventory/screens/upload_image_screen.dart';
+import 'package:barcodeinventory/widgets/images.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/custom_category_button_widget.dart';
+import '../widgets/drawer_widget.dart';
 import 'inventory_entry_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
     const BarCodeGenerateScreen(),
     const AddProductScreen(),
     const CheckPriceScreen(),
-    const CountInventoryScreen(),
     const TransferStockScreen(),
     const UploadImageScreen(),
   ];
@@ -56,70 +58,66 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
+            const UserAccountsDrawerHeader(
+              accountName: Text("User Name"),
+              accountEmail: Text("user@dailystop.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://cdn1.iconfinder.com/data/icons/bokbokstars-121-classic-stock-icons-1/512/person-man.png"),
+                backgroundColor: Colors.white,
+              ),
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text(
-                'Menú',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Show  Inventory'),
+              leading: const Icon(Icons.dashboard),
+              title: const Text('Show Inventory'),
               onTap: () => _selectPage(0),
             ),
             ListTile(
-              leading: const Icon(Icons.inventory),
+              leading: const Icon(Icons.input),
               title: const Text('Inventory Entry'),
               onTap: () => _selectPage(1),
             ),
             ListTile(
               leading: const Icon(Icons.qr_code),
               title: const Text('Barcode Generator'),
-              onTap: () =>
-                  _selectPage(2), // Updated to index 2 to match the list size
+              onTap: () => _selectPage(2),
             ),
+            const Divider(),
             ListTile(
-              leading: const Icon(Icons.money_off),
+              leading: const Icon(Icons.add_shopping_cart),
               title: const Text('Add Products'),
-              onTap: () =>
-                  _selectPage(3), // Updated to index 2 to match the list size
+              onTap: () => _selectPage(3),
             ),
             ListTile(
-              leading: const Icon(Icons.money_off),
+              leading: const Icon(Icons.attach_money),
               title: const Text('Check Price'),
-              onTap: () =>
-                  _selectPage(4), // Updated to index 2 to match the list size
+              onTap: () => _selectPage(4),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.sync_alt),
+              title: const Text('Transfer Stock'),
+              onTap: () => _selectPage(5),
             ),
             ListTile(
-              leading: const Icon(Icons.money_off),
-              title: const Text('Trasnfer '),
-              onTap: () =>
-                  _selectPage(5), // Updated to index 2 to match the list size
-            ),
-            ListTile(
-              leading: const Icon(Icons.transfer_within_a_station_outlined),
-              title: const Text('Trasnfer Stock'),
-              onTap: () =>
-                  _selectPage(6), // Updated to index 2 to match the list size
-            ),
-            ListTile(
-              leading: const Icon(Icons.transfer_within_a_station_outlined),
+              leading: const Icon(Icons.image),
               title: const Text('Upload Image'),
-              onTap: () =>
-                  _selectPage(7), // Updated to index 2 to match the list size
+              onTap: () => _selectPage(6),
             ),
+            const Divider(),
             ListTile(
-              leading: IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: () => _logout(context),
-              ),
-              title: const Text('Logout'),
+              leading: const Icon(Icons.image),
+              title: const Text('Upload Image'),
+              onTap: () => _selectPage(6),
+            ),
+            CustomCategoryButtonWidget(
+              icon: Images.logout,
+              buttonText: "Log Out",
+              onTap: () => _logout(context),
+              showDivider: true,
             ),
           ],
         ),
