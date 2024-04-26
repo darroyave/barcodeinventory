@@ -86,12 +86,8 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
         child: ListView(
           children: <Widget>[
             const Text('TRANSFER STOCK'),
-            const SizedBox(
-              height: 100,
-            ),
-            Text(
-              _productName ?? "",
-            ),
+            const SizedBox(height: 8),
+            Text(_productName ?? ""),
             TextFormField(
               controller: _productController,
               keyboardType: TextInputType.number,
