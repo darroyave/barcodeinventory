@@ -67,11 +67,8 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inventory Count'),
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20),
         child: ListView(
           children: [
             TextFormField(

@@ -81,9 +81,6 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inventory Entry'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(

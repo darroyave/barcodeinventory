@@ -102,13 +102,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Product'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
+            const Center(
+                child: Text(
+              'Add Product',
+              style: TextStyle(fontSize: 28),
+            )),
             TextFormField(
               controller: _productController,
               decoration: InputDecoration(

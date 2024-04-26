@@ -52,13 +52,16 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Check Price'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: [
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text('CHECK PRICES'),
+              ),
+            ),
             TextFormField(
               controller: _productController,
               decoration: InputDecoration(

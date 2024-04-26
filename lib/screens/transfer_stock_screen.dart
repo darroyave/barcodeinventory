@@ -81,15 +81,11 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: const Text('TRANSFER STOCK '),
-        centerTitle: true,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: ListView(
           children: <Widget>[
+            const Text('TRANSFER STOCK'),
             const SizedBox(
               height: 100,
             ),
