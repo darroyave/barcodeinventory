@@ -1,7 +1,6 @@
 import 'package:barcodeinventory/screens/add_product_screen.dart';
 import 'package:barcodeinventory/screens/barcode_generate_screen.dart';
 import 'package:barcodeinventory/screens/check_price_screen.dart';
-import 'package:barcodeinventory/screens/count_inventory_screen.dart';
 import 'package:barcodeinventory/screens/show_inventory_screen.dart';
 import 'package:barcodeinventory/screens/transfer_stock_screen.dart';
 import 'package:barcodeinventory/screens/upload_image_screen.dart';
@@ -9,7 +8,6 @@ import 'package:barcodeinventory/widgets/images.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/custom_category_button_widget.dart';
-import '../widgets/drawer_widget.dart';
 import 'inventory_entry_screen.dart';
 
 class HomeScreen extends StatefulWidget {
