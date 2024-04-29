@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:barcode_scan2/barcode_scan2.dart';
 
 import '../models/product.dart';
 import '../service/inventory_service.dart';
@@ -21,20 +21,36 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
   String? _productName;
   int? _stock = 0;
 
-  _searchProduct(String barCode) async {
-    http.Response response = await _inventoryService.authorizedGet(
-      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
-    );
+  Future<void> _scanAndSearchProduct() async {
+    var result = await BarcodeScanner.scan();
+    if (result.type == ResultType.Barcode) {
+      _productController.text = result.rawContent;
+      await _searchProduct(result.rawContent);
+    }
+  }
 
-    if (response.statusCode == 200) {
-      dynamic data = jsonDecode(response.body);
-      Product? product = Product.fromJson(data);
+  Future<void> _searchProduct(String barCode) async {
+    try {
+      http.Response response = await _inventoryService.authorizedGet(
+        "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
+      );
 
-      setState(() {
-        _productName = product.name;
-        _stock = product.stock ?? 0;
-      });
-    } else {
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+        Product? product = Product.fromJson(data);
+
+        setState(() {
+          _productName = product.name;
+          _stock = product.stock ?? 0;
+        });
+        // Verifica el stock y muestra la alerta si es necesario
+        if (_stock! < 1) {
+          _showLowStockAlert();
+        }
+      } else {
+        throw Exception('Failed to load product data');
+      }
+    } catch (e) {
       setState(() {
         _productName = "Product does not exist";
         _stock = 0;
@@ -48,6 +64,16 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
       padding: const EdgeInsets.all(20.0),
       child: ListView(
         children: [
+          Center(
+            child: Text(
+              'Inventory Lookup',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Colors.teal,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+          const SizedBox(height: 20.0),
           TextFormField(
             controller: _productController,
             keyboardType: TextInputType.number,
@@ -61,45 +87,83 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
               labelText: 'Scan Product',
               prefixIcon: IconButton(
                 color: Colors.teal,
-                onPressed: () async {
-                  _productController.text = "";
-                  _productName = "";
+                onPressed: () {
+                  _productController.clear();
+                  setState(() {
+                    _productName = null;
+                    _stock = 0;
+                  });
                 },
                 icon: const Icon(Icons.clear),
               ),
               suffixIcon: IconButton(
                 color: Colors.teal,
-                onPressed: () async {},
-                icon: const Icon(Icons.search),
+                onPressed: _scanAndSearchProduct,
+                icon: const Icon(Icons.camera_alt),
               ),
             ),
-            onFieldSubmitted: (_) async {
-              _searchProduct(_productController.text);
-            },
+            onFieldSubmitted: (value) => _searchProduct(value),
           ),
           const SizedBox(height: 12.0),
           Center(
-            child: Text(
-              _productName ?? "",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              margin: const EdgeInsets.all(
+                  20.0), // Ajusta el margen según necesites
+              decoration: BoxDecoration(
+                color: Colors.teal[300], // Color de fondo del contenedor
+                borderRadius: BorderRadius.circular(10.0), // Bordes redondeados
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset:
+                        const Offset(0, 3), // Cambios de posición de la sombra
                   ),
+                ],
+              ),
+              child: Text(
+                _productName ?? "Enter a barcode to search", // Texto a mostrar
+                textAlign: TextAlign.center, // Alineación del texto
+                style: const TextStyle(
+                  color: Colors.black, // Color del texto
+                  fontSize: 20.0, // Tamaño del texto
+                  fontWeight: FontWeight.bold, // Grosor del texto
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 12.0),
+          const SizedBox(height: 30.0),
           Center(
             child: Text(
               "Stock: $_stock",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+              style: Theme.of(context).textTheme.displayLarge,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showLowStockAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Low Stock Alert'),
+          content: const Text('This product is currently out of stock.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el diálogo de alerta
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

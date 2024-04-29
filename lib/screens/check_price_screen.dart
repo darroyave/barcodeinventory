@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:barcode_scan2/barcode_scan2.dart';
 
 import '../models/product.dart';
 import '../service/inventory_service.dart';
@@ -21,6 +21,14 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
   String? _productName;
   int? _productId;
 
+  Future<void> _scanAndSearchProduct() async {
+    var result = await BarcodeScanner.scan();
+    if (result.type == ResultType.Barcode) {
+      _productController.text = result.rawContent;
+      await _searchProduct(result.rawContent);
+    }
+  }
+
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
       "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
@@ -28,18 +36,10 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
       Product? product = Product.fromJson(data);
-      debugPrint(product.price.toString());
-
       setState(() {
         _productId = product.id;
         _productName = product.name;
-
-        products.add(Product(
-          id: product.id,
-          name: product.name,
-          stock: 0,
-          price: product.price,
-        ));
+        products.add(product);
       });
     } else {
       setState(() {
@@ -51,17 +51,21 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
+    return Material(
+      child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Text('CHECK PRICES'),
-              ),
+            const SizedBox(height: 40), // Espacio en la parte superior
+            Text(
+              'Check Prices',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(color: Colors.teal, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 20),
             TextFormField(
               controller: _productController,
               decoration: InputDecoration(
@@ -69,54 +73,42 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: Colors.teal),
                 ),
-                hintText: "Now Press Image and scan Product",
+                hintText: "Scan Product",
                 hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
-                labelText: 'Scan Product',
-                prefixIcon: IconButton(
-                  color: Colors.teal,
-                  onPressed: () async {
-                    _productController.text = "";
-                    _productName = "";
-                  },
-                  icon: const Icon(Icons.clear),
-                ),
+                labelText: 'Enter or Scan Product Code',
+                prefixIcon: const Icon(Icons.qr_code_scanner),
                 suffixIcon: IconButton(
                   color: Colors.teal,
-                  onPressed: () async {
-                    _searchProduct(_productController.text);
-                  },
-                  icon: const Icon(Icons.search),
+                  onPressed: _scanAndSearchProduct,
+                  icon: const Icon(Icons.camera_alt),
                 ),
               ),
-              onFieldSubmitted: (value) {
-                // Add a line break after scanning
-                _productController.text += '\n';
-                // Then perform your search
-                _searchProduct(_productController.text);
-              },
             ),
-            const SizedBox(height: 12.0),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: products.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  child: ListTile(
-                    title: Text(
-                      products[index].name,
-                      style: const TextStyle(fontSize: 24, color: Colors.black),
-                    ),
-                    subtitle: SizedBox(
-                      width: 100.0,
-                      child: Text(
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: ListTile(
+                      title: Text(
+                        products[index].name,
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
                         '\$${products[index].price.toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 24, color: Colors.red),
+                        style: const TextStyle(
+                            fontSize: 30,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),

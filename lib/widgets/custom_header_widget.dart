@@ -13,13 +13,15 @@ class CustomHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 150,
+      
       color: Theme.of(context).primaryColor.withOpacity(0.06),
       child: Padding(
         padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomAssetImageWidget(headerImage, height: 30),
+            CustomAssetImageWidget(headerImage, height: 50),
             const SizedBox(width: Dimensions.paddingSizeSmall),
             Text(
               title,

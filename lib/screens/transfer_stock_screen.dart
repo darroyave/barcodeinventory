@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:barcode_scan2/barcode_scan2.dart';
 
 import '../models/product.dart';
 import '../service/inventory_service.dart';
@@ -32,6 +32,14 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
   ];
 
   final InventoryService _inventoryService = InventoryService();
+
+  Future<void> _scanAndSearchProduct() async {
+    var result = await BarcodeScanner.scan();
+    if (result.type == ResultType.Barcode) {
+      _productController.text = result.rawContent;
+      await _searchProduct(result.rawContent);
+    }
+  }
 
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
@@ -80,14 +88,22 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(25.0),
+    return Material(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: ListView(
           children: <Widget>[
-            const Text('TRANSFER STOCK'),
-            const SizedBox(height: 8),
+            const Center(
+              child: Text('TRANSFER STOCK',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            ),
+            const Divider(
+              height: 1,
+              color: Colors.amber,
+            ),
+            const SizedBox(height: 20),
             Text(_productName ?? ""),
+            const SizedBox(height: 20),
             TextFormField(
               controller: _productController,
               keyboardType: TextInputType.number,
@@ -101,7 +117,7 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
                 labelText: 'Scan Product',
                 prefixIcon: IconButton(
                   color: Colors.teal,
-                  onPressed: () async {
+                  onPressed: () {
                     _productController.text = "";
                     _productName = "";
                   },
@@ -109,13 +125,11 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
                 ),
                 suffixIcon: IconButton(
                   color: Colors.teal,
-                  onPressed: () async {},
-                  icon: const Icon(Icons.search),
+                  onPressed: _scanAndSearchProduct,
+                  icon: const Icon(Icons.camera_alt),
                 ),
               ),
-              onFieldSubmitted: (_) async {
-                _searchProduct(_productController.text);
-              },
+              onFieldSubmitted: (value) => _searchProduct(value),
             ),
             TextField(
               controller: _quantityController,
@@ -151,7 +165,7 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
                   child: Text(warehouse),
                 );
               }).toList(),
-              hint: const Text('Towards Warehouse'),
+              hint: const Text('To Warehouse'),
               onChanged: (String? value) {
                 setState(() {
                   _selectedToWarehouse = value;

@@ -21,7 +21,7 @@ class CustomCategoryButtonWidget extends StatelessWidget {
     this.padding = Dimensions.paddingSizeDefault,
     this.isDrawer = true,
     this.onTap,
-    this.showDivider = false,
+    this.showDivider = false, required TextStyle textStyle,
   });
 
   @override
