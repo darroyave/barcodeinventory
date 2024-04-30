@@ -18,8 +18,6 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
   final TextEditingController _productController = TextEditingController();
   final InventoryService _inventoryService = InventoryService();
   List<Product> products = [];
-  String? _productName;
-  int? _productId;
 
   Future<void> _scanAndSearchProduct() async {
     var result = await BarcodeScanner.scan();
@@ -37,15 +35,10 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
       dynamic data = jsonDecode(response.body);
       Product? product = Product.fromJson(data);
       setState(() {
-        _productId = product.id;
-        _productName = product.name;
         products.add(product);
       });
     } else {
-      setState(() {
-        _productId = 0;
-        _productName = "Product doesn't exist";
-      });
+      setState(() {});
     }
   }
 

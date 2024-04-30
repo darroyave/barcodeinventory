@@ -28,14 +28,6 @@ class _InventoryEntryScreenState extends State<InventoryEntryScreen> {
     'Receive',
   ];
 
-  void _clearFields() {
-    _productController.clear();
-    _quantityController.clear();
-    _selectedConcept = null;
-    _productName = null;
-    _productId = 0;
-  }
-
   Future<void> _submitEntry() async {
     int quantity = int.tryParse(_quantityController.text) ?? 0;
 

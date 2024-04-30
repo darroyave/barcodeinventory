@@ -22,9 +22,6 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
 
   List<ProductData> countData = [];
 
-  String? _productName;
-  int? _productId;
-
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
       "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
@@ -34,33 +31,11 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
       Product? product = Product.fromJson(data);
 
       setState(() {
-        _productId = product.id;
-        _productName = product.name;
-
         countData
             .add(ProductData(id: product.id, name: product.name, stock: 0));
       });
     } else {
-      setState(() {
-        _productId = 0;
-        _productName = "Producto no existe";
-      });
-    }
-  }
-
-  Future<void> _submitCount() async {
-    http.Response response = await _inventoryService.authorizedPost(
-      '${AppConstants.urlBase}/api/inventorycount/data',
-      <String, dynamic>{
-        'products': countData,
-        'store': AppConstants.branchIdDailyStop,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      _showErrorDialog('The entry was successfully registered.');
-    } else {
-      _showErrorDialog('The inventory entry could not be recorded.');
+      setState(() {});
     }
   }
 
@@ -85,7 +60,6 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
                   color: Colors.teal,
                   onPressed: () async {
                     _productController.text = "";
-                    _productName = "";
                   },
                   icon: const Icon(Icons.clear),
                 ),

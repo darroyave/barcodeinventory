@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    // ignore: use_build_context_synchronously
     Navigator.pushReplacementNamed(context, '/login');
   }
 
