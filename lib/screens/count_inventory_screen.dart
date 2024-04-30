@@ -104,24 +104,4 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
       ),
     );
   }
-
-  Future<void> _showErrorDialog(String message) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Inventory Transfer'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
