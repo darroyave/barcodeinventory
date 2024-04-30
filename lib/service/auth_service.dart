@@ -23,6 +23,7 @@ class AuthService {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', accessToken);
+      await prefs.setString('phone', userName);
     } else {
       throw Exception('Login failed');
     }

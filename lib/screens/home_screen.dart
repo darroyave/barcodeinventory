@@ -1,4 +1,5 @@
 import 'package:barcodeinventory/screens/add_product_screen.dart';
+import 'package:barcodeinventory/screens/count_inventory_screen.dart';
 import 'package:barcodeinventory/widgets/custom_appbar.dart';
 import 'package:barcodeinventory/screens/barcode_generate_screen.dart';
 import 'package:barcodeinventory/screens/check_price_screen.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const CheckPriceScreen(),
     const TransferStockScreen(),
     const UploadImageScreen(),
+    const CountInventoryScreen(),
   ];
 
   Future<void> _logout(BuildContext context) async {

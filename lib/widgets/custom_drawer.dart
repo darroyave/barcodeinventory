@@ -53,6 +53,11 @@ class CustomDrawer extends StatelessWidget {
                   name: 'AI Image',
                   icon: Icons.filter,
                 ),
+                SideMenuTile(
+                  ontap: () => onSelectPage(7),
+                  name: 'Count Inventory',
+                  icon: Icons.list,
+                ),
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),

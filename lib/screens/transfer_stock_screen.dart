@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/product.dart';
+import '../models/product_data.dart';
 import '../models/warehouse_model.dart';
 import '../service/inventory_service.dart';
 import '../utils/app_constants.dart';
@@ -20,20 +21,11 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
   WarehouseModel? _selectedFromWarehouse;
   WarehouseModel? _selectedToWarehouse;
 
-  String? _productName;
-  int? _productId;
-
   List<WarehouseModel> _warehouses = [];
 
-  final InventoryService _inventoryService = InventoryService();
+  List<ProductData> countData = [];
 
-  Future<void> _scanAndSearchProduct() async {
-    var result = await BarcodeScanner.scan();
-    if (result.type == ResultType.Barcode) {
-      _productController.text = result.rawContent;
-      await _searchProduct(result.rawContent);
-    }
-  }
+  final InventoryService _inventoryService = InventoryService();
 
   _searchProduct(String barCode) async {
     http.Response response = await _inventoryService.authorizedGet(
@@ -45,33 +37,44 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
       Product? product = Product.fromJson(data);
 
       setState(() {
-        _productName = product.name;
-        _productId = product.id;
+        countData
+            .add(ProductData(id: product.id, name: product.name, stock: 0));
       });
     } else {
-      setState(() {
-        _productName = "Product does not exist";
-      });
+      setState(() {});
     }
   }
 
-  Future<void> _submitTransfer() async {
-    int quantity = 1;
+  Future<String?> getPhone() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('phone');
+  }
 
-    if (quantity > 0 && (_productId ?? 0) > 0) {
+  Future<void> _submitTransfer() async {
+    if (countData.isNotEmpty &&
+        _selectedFromWarehouse != null &&
+        _selectedToWarehouse != null) {
       http.Response response = await _inventoryService.authorizedPost(
         '${AppConstants.urlBase}/api/inventorytransfer',
         <String, dynamic>{
-          'product': _productId ?? 0,
-          'quantity': quantity,
-          'fromWarehouse': _selectedFromWarehouse,
-          'toWarehouse': _selectedToWarehouse,
-          'store': AppConstants.branchIdDailyStop
+          'fromWarehouseId': _selectedFromWarehouse?.id,
+          'ToWarehouseId': _selectedToWarehouse?.id,
+          'BranchId': AppConstants.branchIdDailyStop,
+          'PhoneNumber': await getPhone(),
+          'Items': countData
+              .map((prod) => {
+                    'ProductId': prod.id,
+                    'Cost': 0.0,
+                    'Quantity': prod.stock,
+                  })
+              .toList()
         },
       );
 
       if (response.statusCode == 200) {
         _showErrorDialog('The transfer was successfully registered.');
+
+        countData.clear();
       } else {
         _showErrorDialog('The inventory transfer could not be recorded.');
       }
@@ -116,35 +119,6 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: ListView(
           children: <Widget>[
-            TextFormField(
-              controller: _productController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.teal),
-                ),
-                hintText: "Now Press Image and scan Product",
-                hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
-                labelText: 'Scan Product',
-                prefixIcon: IconButton(
-                  color: Colors.teal,
-                  onPressed: () {
-                    _productController.text = "";
-                    _productName = "";
-                  },
-                  icon: const Icon(Icons.clear),
-                ),
-                suffixIcon: IconButton(
-                  color: Colors.teal,
-                  onPressed: _scanAndSearchProduct,
-                  icon: const Icon(Icons.camera_alt),
-                ),
-              ),
-              onFieldSubmitted: (value) => _searchProduct(value),
-            ),
-            if ((_productName ?? "").isNotEmpty) Text(_productName ?? ""),
-            const SizedBox(height: 20.0),
             DropdownButtonFormField(
               decoration: const InputDecoration(),
               value: _selectedFromWarehouse,
@@ -178,7 +152,61 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
                 });
               },
             ),
-            const SizedBox(height: 50.0),
+            const SizedBox(height: 20.0),
+            TextFormField(
+              controller: _productController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.teal),
+                ),
+                hintText: "Now Press Image and scan Product",
+                hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
+                labelText: 'Scan Product',
+                prefixIcon: IconButton(
+                  color: Colors.teal,
+                  onPressed: () async {
+                    _productController.text = "";
+                  },
+                  icon: const Icon(Icons.clear),
+                ),
+                suffixIcon: IconButton(
+                  color: Colors.teal,
+                  onPressed: () async {
+                    _searchProduct(_productController.text);
+                  },
+                  icon: const Icon(Icons.search),
+                ),
+              ),
+              onFieldSubmitted: (_) async {
+                _searchProduct(_productController.text);
+              },
+            ),
+            const SizedBox(height: 12.0),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: countData.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(countData[index].name),
+                    trailing: SizedBox(
+                      width: 100.0,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration:
+                            const InputDecoration(labelText: 'Quantity'),
+                        onChanged: (value) {
+                          countData[index].stock = int.parse(value);
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12.0),
             ElevatedButton(
               onPressed: _submitTransfer,
               child: const Text(
