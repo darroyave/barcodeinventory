@@ -1,14 +1,14 @@
-class Warehouse {
+class WarehouseModel {
   final int id;
   final String name;
 
-  Warehouse({
+  WarehouseModel({
     required this.id,
     required this.name,
   });
 
-  factory Warehouse.fromJson(Map<String, dynamic> json) {
-    return Warehouse(
+  factory WarehouseModel.fromJson(Map<String, dynamic> json) {
+    return WarehouseModel(
       id: json['id'],
       name: json['name'],
     );

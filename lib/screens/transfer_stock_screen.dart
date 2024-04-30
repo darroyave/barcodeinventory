@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:barcode_scan2/barcode_scan2.dart';
 
 import '../models/product.dart';
+import '../models/warehouse_model.dart';
 import '../service/inventory_service.dart';
 import '../utils/app_constants.dart';
 
@@ -16,19 +17,13 @@ class TransferStockScreen extends StatefulWidget {
 
 class _TransferStockScreenState extends State<TransferStockScreen> {
   final TextEditingController _productController = TextEditingController();
-  String? _selectedFromWarehouse;
-  String? _selectedToWarehouse;
+  WarehouseModel? _selectedFromWarehouse;
+  WarehouseModel? _selectedToWarehouse;
 
   String? _productName;
   int? _productId;
 
-  final List<String> _warehouseOptions = [
-    'STORE ZHILIS RESTAURANT',
-    'STORE PAWTUCKET',
-    'STORE CHARLES',
-    'STORE WHIPLE',
-    'STORE BROADWAY',
-  ];
+  List<WarehouseModel> _warehouses = [];
 
   final InventoryService _inventoryService = InventoryService();
 
@@ -85,6 +80,35 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
     }
   }
 
+  List<WarehouseModel> parseWarehouses(String responseBody) {
+    final parsed =
+        (jsonDecode(responseBody) as List).cast<Map<String, dynamic>>();
+
+    return parsed
+        .map<WarehouseModel>((json) => WarehouseModel.fromJson(json))
+        .toList();
+  }
+
+  loadWarehouses() async {
+    http.Response response = await _inventoryService.authorizedGet(
+      "${AppConstants.urlBase}/api/warehouse/all/branch/${AppConstants.branchIdDailyStop}",
+    );
+    if (response.statusCode == 200) {
+      var tempWarehouses = _warehouses = parseWarehouses(response.body);
+
+      setState(() {
+        _warehouses = tempWarehouses;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    loadWarehouses();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -124,14 +148,14 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
             DropdownButtonFormField(
               decoration: const InputDecoration(),
               value: _selectedFromWarehouse,
-              items: _warehouseOptions.map((String warehouse) {
+              items: _warehouses.map((WarehouseModel warehouse) {
                 return DropdownMenuItem(
                   value: warehouse,
-                  child: Text(warehouse),
+                  child: Text(warehouse.name),
                 );
               }).toList(),
               hint: const Text('From Wharehouse'),
-              onChanged: (String? value) {
+              onChanged: (WarehouseModel? value) {
                 setState(() {
                   _selectedFromWarehouse = value;
                 });
@@ -141,14 +165,14 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
             DropdownButtonFormField(
               decoration: const InputDecoration(),
               value: _selectedToWarehouse,
-              items: _warehouseOptions.map((String warehouse) {
+              items: _warehouses.map((WarehouseModel warehouse) {
                 return DropdownMenuItem(
                   value: warehouse,
-                  child: Text(warehouse),
+                  child: Text(warehouse.name),
                 );
               }).toList(),
               hint: const Text('To Warehouse'),
-              onChanged: (String? value) {
+              onChanged: (WarehouseModel? value) {
                 setState(() {
                   _selectedToWarehouse = value;
                 });
