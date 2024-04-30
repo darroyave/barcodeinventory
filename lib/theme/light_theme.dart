@@ -25,6 +25,8 @@ ThemeData light = ThemeData(
     surface: Colors.white,
     onSurface: const Color(0xFF002349),
     shadow: Colors.grey[300],
+    background: Colors.white,
+    onBackground: Colors.white,
     // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
   ),
   textTheme: GoogleFonts.latoTextTheme(
