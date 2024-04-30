@@ -16,7 +16,6 @@ class TransferStockScreen extends StatefulWidget {
 
 class _TransferStockScreenState extends State<TransferStockScreen> {
   final TextEditingController _productController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController();
   String? _selectedFromWarehouse;
   String? _selectedToWarehouse;
 
@@ -62,11 +61,11 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
   }
 
   Future<void> _submitTransfer() async {
-    int quantity = int.parse("0${_quantityController.text}");
+    int quantity = 1;
 
     if (quantity > 0 && (_productId ?? 0) > 0) {
       http.Response response = await _inventoryService.authorizedPost(
-        '${AppConstants.urlBase}/api/inventorytransfer/data',
+        '${AppConstants.urlBase}/api/inventorytransfer',
         <String, dynamic>{
           'product': _productId ?? 0,
           'quantity': quantity,
@@ -93,17 +92,6 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: ListView(
           children: <Widget>[
-            const Center(
-              child: Text('TRANSFER STOCK',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            ),
-            const Divider(
-              height: 1,
-              color: Colors.amber,
-            ),
-            const SizedBox(height: 20),
-            Text(_productName ?? ""),
-            const SizedBox(height: 20),
             TextFormField(
               controller: _productController,
               keyboardType: TextInputType.number,
@@ -131,13 +119,7 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
               ),
               onFieldSubmitted: (value) => _searchProduct(value),
             ),
-            TextField(
-              controller: _quantityController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Quantity',
-              ),
-            ),
+            if ((_productName ?? "").isNotEmpty) Text(_productName ?? ""),
             const SizedBox(height: 20.0),
             DropdownButtonFormField(
               decoration: const InputDecoration(),
@@ -176,7 +158,7 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
             ElevatedButton(
               onPressed: _submitTransfer,
               child: const Text(
-                'Register transfer',
+                'Transfer Stock',
               ),
             ),
           ],
