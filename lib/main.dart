@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'controllers/theme_controller.dart';
 import 'screens/add_product_screen.dart';
 import 'screens/barcode_generate_screen.dart';
@@ -14,8 +13,6 @@ import 'screens/out_stock_screen.dart';
 import 'screens/show_inventory_screen.dart';
 import 'screens/transfer_stock_screen.dart';
 import 'screens/upload_image_screen.dart';
-import 'theme/dark_theme.dart';
-import 'theme/light_theme.dart';
 import 'utils/get_di.dart' as di;
 
 Future<void> main() async {
@@ -40,7 +37,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Barcode Inventory',
           debugShowCheckedModeBanner: false,
-          theme: themeController.darkTheme ? dark : light,
+         // theme: themeController.darkTheme ? dark : light,
           initialRoute: '/login',
           routes: {
             '/login': (context) => const LoginScreen(),

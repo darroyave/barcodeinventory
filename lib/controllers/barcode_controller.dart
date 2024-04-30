@@ -68,7 +68,7 @@ class BarcodeController extends GetxController implements GetxService {
                 children: [
                   pw.Text(
                     _productName,
-                    style: const pw.TextStyle(fontSize: 40),
+                    style: const pw.TextStyle(fontSize: 30),
                   ),
                   pw.SizedBox(height: 20),
                   pw.BarcodeWidget(
