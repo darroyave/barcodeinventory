@@ -97,7 +97,7 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
       "${AppConstants.urlBase}/api/warehouse/all/branch/${AppConstants.branchIdDailyStop}",
     );
     if (response.statusCode == 200) {
-      var tempWarehouses = _warehouses = parseWarehouses(response.body);
+      var tempWarehouses = parseWarehouses(response.body);
 
       setState(() {
         _warehouses = tempWarehouses;

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
+import '../service/inventory_service.dart';
 
 class AutoCompleteProduct extends StatefulWidget {
   const AutoCompleteProduct({super.key});
@@ -16,12 +16,23 @@ class _AutoCompleteProductState extends State<AutoCompleteProduct> {
   final TextEditingController _searchController = TextEditingController();
   List<Product> _suggestions = [];
 
+  final InventoryService _inventoryService = InventoryService();
+
+  List<Product> parseProducts(String responseBody) {
+    final parsed =
+        (jsonDecode(responseBody) as List).cast<Map<String, dynamic>>();
+
+    return parsed.map<Product>((json) => Product.fromJson(json)).toList();
+  }
+
   void _fetchSuggestions(String query) async {
-    final response =
-        await http.get(Uri.parse('/api/product/autocomplete?name=$query'));
+    final response = await _inventoryService
+        .authorizedGet('/api/product/autocomplete?name=$query');
     if (response.statusCode == 200) {
+      var tempProducts = parseProducts(response.body);
+
       setState(() {
-        _suggestions = List<Product>.from(json.decode(response.body));
+        _suggestions = tempProducts;
       });
     } else {
       throw Exception('Failed to load suggestions');
