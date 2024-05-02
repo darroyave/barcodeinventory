@@ -12,51 +12,53 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: <Widget>[
-          const CustomAccountDrawer(),
           Expanded(
             child: ListView(
               children: [
                 SideMenuTile(
                   ontap: () => onSelectPage(0),
-                  name: 'Show Inventory',
+                  name: 'Check Price',
                   icon: Icons.book, // Using Ionicons
                 ),
                 SideMenuTile(
                   ontap: () => onSelectPage(1),
-                  name: 'Entry Inventory',
+                  name: 'Show Inventory',
                   icon: Icons.abc_outlined,
                 ),
                 SideMenuTile(
                   ontap: () => onSelectPage(2),
+                  name: 'Receive Inventory',
+                  icon: Icons.list,
+                ),
+                SideMenuTile(
+                  ontap: () => onSelectPage(3),
                   name: 'Barcode Generator',
                   icon: Icons.qr_code,
                 ),
-                const Divider(),
+                const Divider(
+                  height: 1,
+                  color: Colors.green,
+                ),
                 SideMenuTile(
-                  ontap: () => onSelectPage(3),
+                  ontap: () => onSelectPage(4),
                   name: 'Add Product',
                   icon: Icons.add_a_photo,
                 ),
                 SideMenuTile(
-                  ontap: () => onSelectPage(4),
-                  name: 'Check Price',
+                  ontap: () => onSelectPage(5),
+                  name: 'Transfer Products',
                   icon: Icons.doorbell_sharp,
                 ),
                 const Divider(),
                 SideMenuTile(
-                  ontap: () => onSelectPage(5),
-                  name: 'Transfer Stock',
-                  icon: Icons.swap_calls,
-                ),
-                SideMenuTile(
                   ontap: () => onSelectPage(6),
                   name: 'AI Image',
-                  icon: Icons.filter,
+                  icon: Icons.swap_calls,
                 ),
                 SideMenuTile(
                   ontap: () => onSelectPage(7),
                   name: 'Count Inventory',
-                  icon: Icons.list,
+                  icon: Icons.countertops,
                 ),
                 const Divider(),
                 ListTile(
@@ -69,28 +71,6 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CustomAccountDrawer extends StatelessWidget {
-  const CustomAccountDrawer({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const UserAccountsDrawerHeader(
-      accountName: Text('Manager '),
-      accountEmail: Text('zameer@dailystop.com'),
-      currentAccountPicture: CircleAvatar(
-        backgroundImage: NetworkImage(
-            'https://img.freepik.com/premium-vector/business-global-economy_24877-41082.jpg'),
-        backgroundColor: Colors.white,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.blue,
       ),
     );
   }
@@ -109,6 +89,7 @@ class SideMenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      titleTextStyle: Theme.of(context).textTheme.bodyLarge,
       onTap: ontap,
       title: Text(name),
       leading: Icon(icon),

@@ -21,11 +21,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final List<Widget> _pages = [
+    const CheckPriceScreen(),
     const ShowInventoryScreen(),
     const InventoryEntryScreen(),
     const BarCodeGenerateScreen(),
     const AddProductScreen(),
-    const CheckPriceScreen(),
     const TransferStockScreen(),
     const UploadImageScreen(),
     const CountInventoryScreen(),
@@ -47,16 +47,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: CustomAppbar(title: 'Dailystop'),
-      ),
-      drawer: CustomDrawer(onSelectPage: _selectPage, onLogout: _logout),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: CustomAppbar(title: 'Dailystop'),
+        ),
+        drawer: CustomDrawer(onSelectPage: _selectPage, onLogout: _logout),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
       ),
     );
   }

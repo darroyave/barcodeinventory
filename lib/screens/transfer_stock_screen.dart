@@ -189,17 +189,45 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
               itemCount: countData.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
-                  child: ListTile(
-                    title: Text(countData[index].name),
-                    trailing: SizedBox(
-                      width: 100.0,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration:
-                            const InputDecoration(labelText: 'Quantity'),
-                        onChanged: (value) {
-                          countData[index].stock = int.parse(value);
-                        },
+                  elevation: 4,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Visibility(
+                    // ignore: unnecessary_null_comparison
+                    visible: countData[index] != null,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                countData[index].name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 150.0,
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Quantity',
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 12.0,
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  countData[index].stock =
+                                      int.tryParse(value) ?? 0;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -1,42 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-ThemeData light = ThemeData(
+ThemeData inventoryTheme = ThemeData(
   fontFamily: 'Roboto',
   primaryColor: const Color(0xFF003473),
-  secondaryHeaderColor: const Color(0xFFCC003F),
-  disabledColor: const Color(0xFFBABFC4),
-  brightness: Brightness.light,
-  hintColor: const Color(0xFF9F9F9F),
+  scaffoldBackgroundColor: const Color(0xFFF5F5F5),
   cardColor: Colors.white,
   appBarTheme: const AppBarTheme(
-    surfaceTintColor: Colors.white,
+    toolbarHeight: 56,
+    centerTitle: true,
+    color: Colors.white,
     elevation: 10,
-    shadowColor: Color(0xFFC2CAD9),
   ),
-  colorScheme: ColorScheme(
-    brightness: Brightness.light,
-    primary: const Color(0xFFEEBD8D),
-    onPrimary: const Color(0xFF003473),
-    secondary: const Color(0xFFCC003F),
-    onSecondary: const Color(0xFFCC003F),
-    error: Colors.redAccent,
-    onError: Colors.redAccent,
+  textTheme: GoogleFonts.latoTextTheme()
+      .apply(
+        bodyColor: Colors.black87,
+        displayColor: Colors.black87,
+      )
+      .copyWith(
+        titleLarge: GoogleFonts.lato(
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+        headlineSmall: GoogleFonts.lato(
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+        headlineMedium: GoogleFonts.lato(
+          fontSize: 24.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+        displaySmall: GoogleFonts.lato(
+          fontSize: 28.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+        displayMedium: GoogleFonts.lato(
+          fontSize: 32.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+        displayLarge: GoogleFonts.lato(
+          fontSize: 36.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+        titleMedium: GoogleFonts.lato(
+          fontSize: 16.0,
+          color: Colors.black87,
+        ),
+        titleSmall: GoogleFonts.lato(
+          fontSize: 14.0,
+          color: Colors.black87,
+        ),
+        bodyLarge: GoogleFonts.lato(
+          fontSize: 16.0,
+          color: Colors.black87,
+        ),
+        bodyMedium: GoogleFonts.lato(
+          fontSize: 14.0,
+          color: Colors.black87,
+        ),
+        bodySmall: GoogleFonts.lato(
+          fontSize: 12.0,
+          color: Colors.black87,
+        ),
+        labelLarge: GoogleFonts.lato(
+          fontSize: 14.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+        labelSmall: GoogleFonts.lato(
+          fontSize: 10.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+      ),
+  colorScheme: const ColorScheme.light(
+    primary: Color(0xFF003473),
+    secondary: Color(0xFFCC003F),
     surface: Colors.white,
-    onSurface: const Color(0xFF002349),
-    shadow: Colors.grey[300],
-    background: Colors.white,
-    onBackground: Colors.white,
-    // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-  ),
-  textTheme: GoogleFonts.latoTextTheme(
-    // Asegúrate de pasar aquí el textTheme del contexto del MaterialApp
-    TextTheme(
-        displayLarge:
-            const TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-        titleLarge:
-            const TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-        bodyMedium: const TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-        bodyLarge: GoogleFonts.montserrat(fontSize: 24)),
-  ),
+    background: Color(0xFFF5F5F5),
+    error: Colors.red,
+    onPrimary: Colors.white,
+    onSecondary: Colors.white,
+    onSurface: Colors.black87,
+    onBackground: Colors.black87,
+    onError: Colors.white,
+  ).copyWith(secondary: const Color(0xFFCC003F)),
 );

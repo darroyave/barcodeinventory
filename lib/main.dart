@@ -1,3 +1,4 @@
+import 'package:barcodeinventory/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -37,18 +38,18 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Barcode Inventory',
           debugShowCheckedModeBanner: false,
-         // theme: themeController.darkTheme ? dark : light,
+          theme: inventoryTheme,
           initialRoute: '/login',
           routes: {
             '/login': (context) => const LoginScreen(),
             '/home': (context) => const HomeScreen(),
             '/showinventory': (context) => const ShowInventoryScreen(),
-            '/addproduct': (context) => const AddProductScreen(),
             '/entryinventory': (context) => const InventoryEntryScreen(),
-            '/transferinventory': (context) => const TransferStockScreen(),
-            '/outinventory': (context) => const OutStockScreen(),
             '/countinventory': (context) => const CountInventoryScreen(),
             '/checkprice': (context) => const CheckPriceScreen(),
+            '/addproduct': (context) => const AddProductScreen(),
+            '/transferinventory': (context) => const TransferStockScreen(),
+            '/outinventory': (context) => const OutStockScreen(),
             '/barcodegenerator': (context) => const BarCodeGenerateScreen(),
             '/uploadImage': (context) => const UploadImageScreen(),
           },
