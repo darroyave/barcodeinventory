@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +18,9 @@ class TransferStockScreen extends StatefulWidget {
 }
 
 class _TransferStockScreenState extends State<TransferStockScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  List<Product> _suggestions = [];
+
   final TextEditingController _productController = TextEditingController();
   WarehouseModel? _selectedFromWarehouse;
   WarehouseModel? _selectedToWarehouse;
@@ -112,6 +116,66 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
     super.initState();
   }
 
+  void _openAutocompleteDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Search Product"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _searchController,
+                onChanged: _fetchSuggestions,
+                decoration: const InputDecoration(
+                  labelText: 'Search',
+                  hintText: 'Type something...',
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _suggestions.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(_suggestions[index].name),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Product> parseProducts(String responseBody) {
+    final parsed =
+        (jsonDecode(responseBody) as List).cast<Map<String, dynamic>>();
+
+    return parsed.map<Product>((json) => Product.fromJson(json)).toList();
+  }
+
+  void _fetchSuggestions(String query) async {
+    if (query.isNotEmpty && query.length > 3) {
+      final response = await _inventoryService.authorizedGet(
+          '${AppConstants.urlBase}/api/product/autocomplete?name=$query');
+      if (response.statusCode == 200) {
+        var tempProducts = parseProducts(response.body);
+
+        setState(() {
+          _suggestions = tempProducts;
+        });
+      } else {
+        throw Exception('Failed to load suggestions');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -153,34 +217,48 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
               },
             ),
             const SizedBox(height: 20.0),
-            TextFormField(
-              controller: _productController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.teal),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _productController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.teal),
+                      ),
+                      hintText: "Now Press Image and scan Product",
+                      hintStyle:
+                          const TextStyle(fontSize: 16, color: Colors.grey),
+                      labelText: 'Scan Product',
+                      prefixIcon: IconButton(
+                        color: Colors.teal,
+                        onPressed: () async {
+                          _productController.text = "";
+                        },
+                        icon: const Icon(Icons.clear),
+                      ),
+                      suffixIcon: IconButton(
+                        color: Colors.teal,
+                        onPressed: () async {
+                          _searchProduct(_productController.text);
+                        },
+                        icon: const Icon(Icons.search),
+                      ),
+                    ),
+                    onFieldSubmitted: (_) async {
+                      _searchProduct(_productController.text);
+                    },
+                  ),
                 ),
-                hintText: "Now Press Image and scan Product",
-                hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
-                labelText: 'Scan Product',
-                prefixIcon: IconButton(
+                IconButton(
                   color: Colors.teal,
-                  onPressed: () async {
-                    _productController.text = "";
+                  onPressed: () {
+                    _openAutocompleteDialog(context);
                   },
-                  icon: const Icon(Icons.clear),
+                  icon: const Icon(Icons.arrow_circle_up_rounded),
                 ),
-                suffixIcon: IconButton(
-                  color: Colors.teal,
-                  onPressed: () async {
-                    _searchProduct(_productController.text);
-                  },
-                  icon: const Icon(Icons.search),
-                ),
-              ),
-              onFieldSubmitted: (_) async {
-                _searchProduct(_productController.text);
-              },
+              ],
             ),
             const SizedBox(height: 12.0),
             ListView.builder(
