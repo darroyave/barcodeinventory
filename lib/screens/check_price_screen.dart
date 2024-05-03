@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:barcodeinventory/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:barcode_scan2/barcode_scan2.dart';
@@ -60,16 +61,20 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Padding(
+    return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: CustomAppbar(
+          title: 'Check Price',
+        ),
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Check Prices',
-                style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 20),
             TextFormField(
+              onFieldSubmitted: (value) => _searchProduct(value),
               keyboardAppearance: Brightness.dark,
               keyboardType: TextInputType.number,
               controller: _productController,
@@ -81,7 +86,7 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
                 hintText: "Scan Product",
                 hintStyle: Theme.of(context).textTheme.labelLarge,
                 labelText: 'Enter or Scan Product Code',
-                prefixIcon: const Icon(Icons.qr_code_scanner),
+                prefixIcon: const Icon(Icons.remove),
                 suffixIcon: IconButton(
                   color: Colors.teal,
                   onPressed: _scanAndSearchProduct,

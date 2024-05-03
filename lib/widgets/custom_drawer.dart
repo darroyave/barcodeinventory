@@ -14,9 +14,12 @@ class CustomDrawer extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: ListView(
-              children: [
+              children: <Widget>[
+           
                 SideMenuTile(
-                  ontap: () => onSelectPage(0),
+                  ontap: () {
+                    onSelectPage(0);
+                  },
                   name: 'Check Price',
                   icon: Icons.book, // Using Ionicons
                 ),
@@ -61,6 +64,7 @@ class CustomDrawer extends StatelessWidget {
                   icon: Icons.countertops,
                 ),
                 const Divider(),
+        
                 ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),
                   title: const Text('Log Out',

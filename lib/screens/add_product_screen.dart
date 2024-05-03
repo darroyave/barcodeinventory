@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:barcodeinventory/utils/app_constants.dart';
+import 'package:barcodeinventory/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -102,16 +103,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: CustomAppbar(
+          title: 'Add Product',
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
-            const Center(
-                child: Text(
-              'Add Product',
-              style: TextStyle(fontSize: 28),
-            )),
             TextFormField(
+              
               controller: _productController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(

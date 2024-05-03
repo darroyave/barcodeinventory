@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:barcodeinventory/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,6 +43,12 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: CustomAppbar(
+          title: 'Receive Inventory',
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20),
         child: ListView(
@@ -102,6 +109,9 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Drawer, label: const Text('Menu')),
     );
   }
 }

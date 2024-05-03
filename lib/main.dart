@@ -1,4 +1,4 @@
-import 'package:barcodeinventory/theme/light_theme.dart';
+import 'package:barcodeinventory/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,11 +8,11 @@ import 'screens/barcode_generate_screen.dart';
 import 'screens/check_price_screen.dart';
 import 'screens/count_inventory_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/inventory_entry_screen.dart';
+import 'screens/receive_inventory_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/out_stock_screen.dart';
 import 'screens/show_inventory_screen.dart';
-import 'screens/transfer_stock_screen.dart';
+import 'screens/transfer_inventory_screen.dart';
 import 'screens/upload_image_screen.dart';
 import 'utils/get_di.dart' as di;
 
@@ -38,13 +38,13 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Barcode Inventory',
           debugShowCheckedModeBanner: false,
-          theme: inventoryTheme,
+          theme: appTheme,
           initialRoute: '/login',
           routes: {
             '/login': (context) => const LoginScreen(),
             '/home': (context) => const HomeScreen(),
             '/showinventory': (context) => const ShowInventoryScreen(),
-            '/entryinventory': (context) => const InventoryEntryScreen(),
+            '/entryinventory': (context) => const ReceiveInventory(),
             '/countinventory': (context) => const CountInventoryScreen(),
             '/checkprice': (context) => const CheckPriceScreen(),
             '/addproduct': (context) => const AddProductScreen(),

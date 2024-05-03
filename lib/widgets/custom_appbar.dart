@@ -16,26 +16,9 @@ class _CustomAppbarState extends State<CustomAppbar> {
       title: Text(
         widget.title,
       ),
-      elevation: 5,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15),
-          bottomRight: Radius.circular(15),
-        ),
-      ),
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.green, Colors.teal, Colors.blue],
-          ),
-        ),
-      ),
       systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: Colors.green, // transparente para ver el gradiente
       ),
-
     );
   }
 }

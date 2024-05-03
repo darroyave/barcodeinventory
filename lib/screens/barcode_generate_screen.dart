@@ -1,3 +1,4 @@
+import 'package:barcodeinventory/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,12 @@ class BarCodeGenerateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: CustomAppbar(
+          title: 'Barcode Generator',
+        ),
+      ),
       body: GetBuilder<BarcodeController>(
         builder: (controller) {
           return Padding(

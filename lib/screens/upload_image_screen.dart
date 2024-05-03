@@ -1,4 +1,5 @@
 import 'package:barcodeinventory/controllers/upload_controller.dart';
+import 'package:barcodeinventory/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,9 +12,15 @@ class UploadImageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: CustomAppbar(
+          title: 'Remove Backround',
+        ),
+      ),
       body: GetBuilder<UploadController>(builder: (controller) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
           child: ListView(
             padding: const EdgeInsets.all(8.0),
             children: [

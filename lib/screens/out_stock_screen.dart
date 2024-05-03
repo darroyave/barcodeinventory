@@ -79,7 +79,7 @@ class _OutStockScreenState extends State<OutStockScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text('OUT STOCK'),
       ),
