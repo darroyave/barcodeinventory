@@ -61,18 +61,19 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Show Inventory',
+          scaffoldKey: scaffoldKey,
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: [
-         
             const SizedBox(height: 20.0),
             TextFormField(
               controller: _productController,
@@ -94,7 +95,7 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
                       _stock = 0;
                     });
                   },
-                  icon: const Icon(Icons.clear),
+                  icon: const Icon(Icons.cleaning_services),
                 ),
                 suffixIcon: IconButton(
                   color: Colors.teal,
@@ -107,41 +108,45 @@ class _ShowInventoryScreenState extends State<ShowInventoryScreen> {
             const SizedBox(height: 12.0),
             Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                margin: const EdgeInsets.all(
-                    20.0), // Ajusta el margen según necesites
+                height: MediaQuery.of(context).size.height / 3,
+                padding: const EdgeInsets.all(20), //
+
                 decoration: BoxDecoration(
-                  color: Colors.teal[300], // Color de fondo del contenedor
-                  borderRadius:
-                      BorderRadius.circular(10.0), // Bordes redondeados
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                      offset: const Offset(
-                          0, 3), // Cambios de posición de la sombra
-                    ),
-                  ],
+                  color: Colors.white, // Color de fondo del contenedor
+                  border: Border.all(
+                    color: Colors.green, // Color del borde
+                    width: 1, // Grosor del borde
+                  ),
+                  borderRadius: BorderRadius.circular(
+                      5), // Redondea las esquinas del borde
                 ),
-                child: Text(
-                  _productName ??
-                      "Enter a barcode to search", // Texto a mostrar
-                  textAlign: TextAlign.center, // Alineación del texto
-                  style: const TextStyle(
-                    color: Colors.black, // Color del texto
-                    fontSize: 20.0, // Tamaño del texto
-                    fontWeight: FontWeight.bold, // Grosor del texto
+                child: Center(
+                  child: Text(
+                    _productName ??
+                        "Enter a barcode to search", // Texto a mostrar
+                    textAlign: TextAlign.center, // Alineación del texto
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 30.0),
-            Center(
-              child: Text(
-                "Stock: $_stock",
-                style: Theme.of(context).textTheme.displayLarge,
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.white, // Color de fondo del contenedor
+                border: Border.all(
+                  color: Colors.orange, // Color del borde
+                  width: 3, // Grosor del borde
+                ),
+                borderRadius:
+                    BorderRadius.circular(5), // Redondea las esquinas del borde
+              ),
+              child: Center(
+                child: Text(
+                  "Stock: $_stock",
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
               ),
             ),
           ],

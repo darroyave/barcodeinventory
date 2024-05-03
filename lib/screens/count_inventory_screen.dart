@@ -42,11 +42,13 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Receive Inventory',
+          scaffoldKey: scaffoldKey,
         ),
       ),
       body: Padding(
@@ -109,9 +111,6 @@ class _CountInventoryScreenState extends State<CountInventoryScreen> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Drawer, label: const Text('Menu')),
     );
   }
 }

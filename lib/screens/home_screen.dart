@@ -18,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>(); // Clave del Scaffold
   int _selectedIndex = 0;
   final List<Widget> _pages = [
     const CheckPriceScreen(),
@@ -48,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         // appBar: PreferredSize(
         //   preferredSize: const Size.fromHeight(56),

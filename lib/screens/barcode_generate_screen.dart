@@ -13,11 +13,13 @@ class BarCodeGenerateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Barcode Generator',
+          scaffoldKey: scaffoldKey,
         ),
       ),
       body: GetBuilder<BarcodeController>(

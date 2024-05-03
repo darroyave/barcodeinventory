@@ -11,11 +11,13 @@ class UploadImageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Remove Backround',
+          scaffoldKey: scaffoldKey,
         ),
       ),
       body: GetBuilder<UploadController>(builder: (controller) {

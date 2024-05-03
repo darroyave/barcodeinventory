@@ -7,7 +7,7 @@ ThemeData appTheme = ThemeData(
   scaffoldBackgroundColor: const Color(0xFFF5F5F5),
   cardColor: Colors.white,
   appBarTheme: AppBarTheme(
-    backgroundColor: Colors.green.shade300,
+    backgroundColor: Colors.white.withOpacity(0.2),
     titleTextStyle: GoogleFonts.montserrat(
       fontSize: 20, // Tamaño de la fuente
       fontWeight: FontWeight.w500, // Peso de la fuente

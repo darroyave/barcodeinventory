@@ -102,11 +102,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Add Product',
+          scaffoldKey: scaffoldKey,
         ),
       ),
       body: Padding(
@@ -114,7 +116,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
         child: ListView(
           children: <Widget>[
             TextFormField(
-              
               controller: _productController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(

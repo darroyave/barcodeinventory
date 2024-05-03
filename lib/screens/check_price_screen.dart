@@ -18,8 +18,10 @@ class CheckPriceScreen extends StatefulWidget {
 class _CheckPriceScreenState extends State<CheckPriceScreen> {
   final TextEditingController _productController = TextEditingController();
   final InventoryService _inventoryService = InventoryService();
+  final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>(); // Aquí movemos la definición
   List<Product> products = [];
-  String _message = ''; // Mensaje para el usuario
+  String _message = '';
 
   Future<void> _scanAndSearchProduct() async {
     try {
@@ -62,10 +64,12 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Check Price',
+          scaffoldKey: _scaffoldKey,
         ),
       ),
       body: Padding(
@@ -86,7 +90,7 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
                 hintText: "Scan Product",
                 hintStyle: Theme.of(context).textTheme.labelLarge,
                 labelText: 'Enter or Scan Product Code',
-                prefixIcon: const Icon(Icons.remove),
+                prefixIcon: const Icon(Icons.cleaning_services),
                 suffixIcon: IconButton(
                   color: Colors.teal,
                   onPressed: _scanAndSearchProduct,
@@ -116,12 +120,11 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              products[index].name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            Center(
+                              child: Text(products[index].name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -134,7 +137,7 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
                                           .colorScheme
                                           .secondary),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 20),
                             Text(
                               products[index].name,
                               style: Theme.of(context).textTheme.bodyMedium,
@@ -157,7 +160,7 @@ class _CheckPriceScreenState extends State<CheckPriceScreen> {
                                       style: TextStyle(color: Colors.white)),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.favorite_border),
+                                  icon: const Icon(Icons.close),
                                   onPressed: () {
                                     // Acción al presionar el ícono de favorito
                                   },

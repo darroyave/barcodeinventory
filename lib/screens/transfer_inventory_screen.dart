@@ -178,11 +178,13 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Transfer Inventory',
+          scaffoldKey: scaffoldKey,
         ),
       ),
       body: Padding(
@@ -282,7 +284,7 @@ class _TransferStockScreenState extends State<TransferStockScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Row(
+                        child: Column(
                           children: [
                             Expanded(
                               child: Text(

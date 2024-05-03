@@ -1,12 +1,12 @@
 import 'dart:convert';
-
-import 'package:barcodeinventory/utils/app_constants.dart';
-import 'package:barcodeinventory/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:barcode_scan2/barcode_scan2.dart';
 
 import '../models/product.dart';
 import '../service/inventory_service.dart';
+import '../utils/app_constants.dart';
+import '../widgets/custom_appbar.dart';
 
 class ReceiveInventory extends StatefulWidget {
   const ReceiveInventory({super.key});
@@ -18,28 +18,53 @@ class ReceiveInventory extends StatefulWidget {
 class _ReceiveInventoryState extends State<ReceiveInventory> {
   final TextEditingController _productController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final InventoryService _inventoryService = InventoryService();
-
   String? _selectedConcept;
-  String? _productName;
-  int? _productId;
+  Product? _selectedProduct;
+  final List<String> _conceptOptions = ['Receive'];
 
-  final List<String> _conceptOptions = [
-    'Receive',
-  ];
+  Future<void> _scanAndSearchProduct() async {
+    var result = await BarcodeScanner.scan();
+    if (result.type == ResultType.Barcode) {
+      _searchProduct(result.rawContent);
+      _productController.text = result.rawContent;
+    }
+  }
+
+  Future<void> _searchProduct(String barCode) async {
+    http.Response response = await _inventoryService.authorizedGet(
+      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
+    );
+    if (response.statusCode == 200) {
+      dynamic data = jsonDecode(response.body);
+      setState(() {
+        _selectedProduct = Product.fromJson(data);
+      });
+    } else {
+      setState(() {
+        _selectedProduct = null;
+      });
+      _showErrorDialog('Product not found');
+    }
+  }
 
   Future<void> _submitEntry() async {
-    int quantity = int.tryParse(_quantityController.text) ?? 0;
-
-    String concept = _selectedConcept!;
+    if (_selectedProduct == null ||
+        _selectedConcept == null ||
+        _quantityController.text.isEmpty) {
+      _showErrorDialog('Please fill all fields correctly');
+      return;
+    }
+    int quantity = int.parse(_quantityController.text);
 
     http.Response response = await _inventoryService.authorizedPost(
       '${AppConstants.urlBase}/api/inventory/entry',
       <String, dynamic>{
-        'product': _productId ?? 0,
+        'product': _selectedProduct!.id,
         'quantity': quantity,
-        'concept': concept,
+        'concept': _selectedConcept,
         'store': AppConstants.branchIdDailyStop
       },
     );
@@ -47,37 +72,18 @@ class _ReceiveInventoryState extends State<ReceiveInventory> {
     if (response.statusCode == 200) {
       _showErrorDialog('The entry was successfully registered.');
     } else {
-      _showErrorDialog('The inventory entry could not be recorded.');
-    }
-  }
-
-  _searchProduct(String barCode) async {
-    http.Response response = await _inventoryService.authorizedGet(
-      "${AppConstants.urlBase}/api/product/upc/${AppConstants.branchIdDailyStop}/$barCode",
-    );
-    if (response.statusCode == 200) {
-      dynamic data = jsonDecode(response.body);
-      Product? product = Product.fromJson(data);
-
-      setState(() {
-        _productId = product.id;
-        _productName = product.name;
-      });
-    } else {
-      setState(() {
-        _productId = 0;
-        _productName = "Producto no existe";
-      });
+      _showErrorDialog('Failed to register the inventory entry.');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppbar(
           title: 'Receive Inventory',
+          scaffoldKey: scaffoldKey,
         ),
       ),
       body: Padding(
@@ -86,96 +92,53 @@ class _ReceiveInventoryState extends State<ReceiveInventory> {
           children: <Widget>[
             TextFormField(
               controller: _productController,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.teal),
-                ),
-                hintText: "Now Press Image and scan Product",
-                hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
                 labelText: 'Scan Product',
-                prefixIcon: IconButton(
-                  color: Colors.teal,
-                  onPressed: () async {
-                    _productController.text = "";
-                    _productName = "";
-                  },
-                  icon: const Icon(Icons.clear),
-                ),
                 suffixIcon: IconButton(
-                  color: Colors.teal,
-                  onPressed: () async {
-                    _searchProduct(_productController.text);
-                  },
-                  icon: const Icon(Icons.search),
+                  icon: const Icon(Icons.camera_alt),
+                  onPressed: _scanAndSearchProduct,
                 ),
               ),
-              onFieldSubmitted: (_) async {
-                _searchProduct(_productController.text);
-              },
             ),
-            const SizedBox(height: 12.0),
-            Center(
-              child: Text(
-                _productName ?? "",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+            const SizedBox(height: 12),
+            if (_selectedProduct != null) ...[
+              Text(
+                'Product: ${_selectedProduct!.name}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 12.0),
+              const SizedBox(height: 8),
+            ],
             TextFormField(
               controller: _quantityController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.teal),
-                ),
+              decoration: const InputDecoration(
                 labelText: 'Quantity',
-                hintText: "insert quantity Products",
-                hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            DropdownButtonFormField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.teal),
-                ),
-              ),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<String>(
               value: _selectedConcept,
-              items: _conceptOptions.map((String concept) {
-                return DropdownMenuItem(
-                  alignment: Alignment.topCenter,
-                  value: concept,
-                  child: Text(concept),
+              items:
+                  _conceptOptions.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
                 );
               }).toList(),
-              hint: const Text('Concept'),
-              onChanged: (String? value) {
+              onChanged: (String? newValue) {
                 setState(() {
-                  _selectedConcept = value;
+                  _selectedConcept = newValue;
                 });
               },
+              decoration: const InputDecoration(
+                labelText: 'Concept',
+              ),
             ),
-            const SizedBox(height: 25.0),
+            const SizedBox(height: 20),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink,
-              ),
               onPressed: _submitEntry,
-              child: Text(
-                'Register Inventory',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Colors.white),
-              ),
+              child: const Text('Register Inventory'),
             ),
           ],
         ),
@@ -188,14 +151,12 @@ class _ReceiveInventoryState extends State<ReceiveInventory> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Inventory Transfer'),
+          title: const Text('Notice'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
             ),
           ],
         );
